@@ -29,7 +29,7 @@ type Config struct {
 func newMonitorFunc(client *http.Client, method, url string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("monitoring", url)
-		req, err := http.NewRequest(method, url, nil)
+		req, err := http.NewRequest(method, url, r.Body)
 		if err != nil {
 			panic(err)
 		}
