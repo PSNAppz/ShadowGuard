@@ -1,0 +1,10 @@
+{
+	"host": "http://localhost",
+	"port": ":8081",
+	"tasks": [{
+		"type": "monitor",
+		"method": "GET",
+		"external": "/external",
+		"internal": "/internal"
+	}]
+}
