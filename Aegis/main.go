@@ -25,10 +25,6 @@ type Config struct {
 	Tasks []Task `json:"tasks"`
 }
 
-type Monitor struct {
-	handler http.Handler
-}
-
 // Read performs monitoring operation, contacts internal server and returns response to client
 func newMonitorFunc(client *http.Client, method, url string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
