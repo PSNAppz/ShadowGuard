@@ -29,6 +29,7 @@ type Config struct {
 func newMonitorFunc(client *http.Client, method, url string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("monitoring", url)
+		defer r.Body.Close()
 		req, err := http.NewRequest(method, url, r.Body)
 		if err != nil {
 			panic(err)
