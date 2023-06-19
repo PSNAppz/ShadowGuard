@@ -52,5 +52,4 @@ func Init() *Config {
 	json.Unmarshal(byteData, &config)
 	log.Printf("Configuration file loaded. %+v\n", config)
 	return &config
-
 }
