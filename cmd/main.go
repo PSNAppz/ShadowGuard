@@ -1,7 +1,7 @@
 package main
 
 import (
-	configsPkg "AegisGuard/pkg/config"
+	conf "AegisGuard/pkg/config"
 	"AegisGuard/pkg/middleware/monitor"
 	"log"
 	"net/http"
@@ -10,16 +10,15 @@ import (
 )
 
 func main() {
-
-	// Handle tasks
 	r := mux.NewRouter()
 	client := &http.Client{}
 	handlers := make(map[string]http.HandlerFunc)
-	config := configsPkg.InitConfig()
+	config := conf.Init()
 
 	for _, task := range config.Tasks {
-		if task.Type == configsPkg.CAPTURE {
-			monitorFunc := monitor.NewMonitorFunc(client, task.Method, task.Internal)
+		if task.Type == conf.MONITOR {
+			uri := config.Host + config.Port + task.Internal
+			monitorFunc := monitor.New(client, task.Method, uri)
 			r.HandleFunc(task.External, monitorFunc)
 			handlers[task.External] = monitorFunc
 		}

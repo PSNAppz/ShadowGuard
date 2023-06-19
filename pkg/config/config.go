@@ -31,7 +31,7 @@ type Config struct {
 
 // Config file path can be set dynamically using environment variables.
 // The default is assumed to be `aegis.json` in the same directory.
-func InitConfig() *Config {
+func Init() *Config {
 	configFilePath := os.Getenv("AEGIS_CONFIG")
 	if configFilePath == "" {
 		configFilePath = "aegis.json"

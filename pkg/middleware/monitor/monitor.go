@@ -7,7 +7,7 @@ import (
 )
 
 // Read performs monitoring operation, contacts internal server and returns response to client
-func NewMonitorFunc(client *http.Client, method, url string) http.HandlerFunc {
+func New(client *http.Client, method, url string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("monitoring", url)
 		defer r.Body.Close()
