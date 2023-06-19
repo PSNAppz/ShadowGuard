@@ -1,15 +1,15 @@
 package monitor
 
 import (
-	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
 // Read performs monitoring operation, contacts internal server and returns response to client
 func New(client *http.Client, method, url string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("monitoring", url)
+		log.Printf("Incoming request: %+v\n", r)
 		defer r.Body.Close()
 		req, err := http.NewRequest(method, url, r.Body)
 		if err != nil {
@@ -26,7 +26,7 @@ func New(client *http.Client, method, url string) http.HandlerFunc {
 		if err != nil {
 			panic(err)
 		}
-		fmt.Printf("%+v\n", resp)
+		log.Printf("Outgoing response: %+v\n", resp)
 		w.Write(respBody)
 	}
 }
