@@ -14,19 +14,19 @@ const (
 	CAPTURE TaskType = "capture"
 )
 
-// Task represents an individual Aegis operation for an endpoint
-type Task struct {
-	Type     TaskType `json:"type"`
-	Method   string   `json:"method"`
-	External string   `json:"external"`
-	Internal string   `json:"internal"`
+// Endpoint represents an external API Endpoint and its corresponding internal and
+type Endpoint struct {
+	Tasks    []TaskType `json:"tasks"`
+	Method   string     `json:"method"`
+	External string     `json:"external"`
+	Internal string     `json:"internal"`
 }
 
 // Config represents the general configuration of Aegis
 type Config struct {
-	Host  string `json:"host"`
-	Port  string `json:"port"`
-	Tasks []Task `json:"tasks"`
+	Host      string     `json:"host"`
+	Port      string     `json:"port"`
+	Endpoints []Endpoint `json:"endpoints"`
 }
 
 // Config file path can be set dynamically using environment variables.

@@ -2,7 +2,7 @@ package main
 
 import (
 	conf "AegisGuard/pkg/config"
-	"AegisGuard/pkg/middleware/monitor"
+	"AegisGuard/pkg/middleware"
 	"log"
 	"net/http"
 
@@ -15,15 +15,12 @@ func main() {
 	handlers := make(map[string]http.HandlerFunc)
 	config := conf.Init()
 
-	for _, task := range config.Tasks {
-		if task.Type == conf.MONITOR {
-			uri := config.Host + config.Port + task.Internal
-			monitorFunc := monitor.New(client, task.Method, uri)
-			r.HandleFunc(task.External, monitorFunc)
-			handlers[task.External] = monitorFunc
-		}
+	for _, endpoint := range config.Endpoints {
+		uri := config.Host + config.Port + endpoint.Internal
+		monitorFunc := middleware.Intercept(client, endpoint.Method, uri, endpoint.Tasks)
+		r.HandleFunc(endpoint.External, monitorFunc)
+		handlers[endpoint.External] = monitorFunc
 	}
-
 	log.Printf("Listening on port %s\n", config.Port)
 	http.ListenAndServe(config.Port, r)
 }
