@@ -17,7 +17,7 @@ const (
 // Endpoint represents an external API Endpoint and its corresponding internal and
 type Endpoint struct {
 	Tasks    []TaskType `json:"tasks"`
-	Method   string     `json:"method"`
+	Methods  []string   `json:"methods"`
 	External string     `json:"external"`
 	Internal string     `json:"internal"`
 }

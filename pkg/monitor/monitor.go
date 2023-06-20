@@ -21,7 +21,6 @@ type RequestDetails struct {
 // TODO: Add more details to the log and store the same for future analysis
 func Listen(r *http.Request) {
 	log.Println("Incoming Request Details")
-
 	requestDetails := RequestDetails{
 		Method:           r.Method,
 		URL:              r.URL.String(),

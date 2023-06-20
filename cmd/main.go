@@ -12,15 +12,16 @@ import (
 func main() {
 	r := mux.NewRouter()
 	client := &http.Client{}
-	handlers := make(map[string]http.HandlerFunc)
 	config := conf.Init()
 
 	for _, endpoint := range config.Endpoints {
 		uri := config.Host + config.Port + endpoint.Internal
-		monitorFunc := middleware.Intercept(client, endpoint.Method, uri, endpoint.Tasks)
-		r.HandleFunc(endpoint.External, monitorFunc)
-		handlers[endpoint.External] = monitorFunc
+		for _, method := range endpoint.Methods {
+			monitorFunc := middleware.Intercept(client, method, uri, endpoint.Tasks)
+			r.HandleFunc(endpoint.External, monitorFunc)
+		}
 	}
+
 	log.Printf("Listening on port %s\n", config.Port)
 	http.ListenAndServe(config.Port, r)
 }
