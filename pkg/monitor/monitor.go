@@ -17,10 +17,7 @@ type RequestDetails struct {
 	TransferEncoding []string
 }
 
-// Performs monitoring operation and prints out the details of the request
-// TODO: Add more details to the log and store the same for future analysis
-func Listen(r *http.Request) {
-	log.Println("Incoming Request Details")
+func newRequestDetails(r *http.Request) RequestDetails {
 	requestDetails := RequestDetails{
 		Method:           r.Method,
 		URL:              r.URL.String(),
@@ -31,7 +28,14 @@ func Listen(r *http.Request) {
 		ContentLength:    r.ContentLength,
 		TransferEncoding: r.TransferEncoding,
 	}
+	return requestDetails
+}
 
+// Performs monitoring operation and prints out the details of the request
+// TODO: Add more details to the log and store the same for future analysis
+func Listen(r *http.Request) {
+	log.Println("Incoming Request Details")
+	requestDetails := newRequestDetails(r)
 	log.Printf("%+v\n\n", requestDetails)
 
 }
