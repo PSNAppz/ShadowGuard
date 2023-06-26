@@ -21,6 +21,7 @@ func (t *Task) Handle(r *http.Request) {
 	switch t.Type {
 	case MONITOR:
 		monitor.Handle(r, t.Settings)
+	default:
+		panic("invalid task type given.")
 	}
-
 }
