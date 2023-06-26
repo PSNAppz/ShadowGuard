@@ -2,7 +2,12 @@
 	"host": "http://localhost",
 	"port": ":8081",
 	"endpoints": [{
-		"tasks": ["monitor"],
+		"tasks": [{
+			"type": "monitor",
+			"settings": {
+				"verbose": true
+			}
+		}],
 		"methods": ["GET"],
 		"external": "/external",
 		"internal": "/internal"

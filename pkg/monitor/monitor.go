@@ -6,6 +6,15 @@ import (
 	"net/http"
 )
 
+// Performs monitoring operation and prints out the details of the request
+// TODO: Add more details to the log and store the same for future analysis
+func Handle(r *http.Request, settings map[string]interface{}) {
+	log.Println("Incoming Request Details")
+	log.Println("Settings", settings)
+	requestDetails := newRequestDetails(r)
+	log.Printf("%+v\n\n", requestDetails)
+}
+
 type RequestDetails struct {
 	Method           string
 	URL              string
@@ -29,13 +38,4 @@ func newRequestDetails(r *http.Request) RequestDetails {
 		TransferEncoding: r.TransferEncoding,
 	}
 	return requestDetails
-}
-
-// Performs monitoring operation and prints out the details of the request
-// TODO: Add more details to the log and store the same for future analysis
-func Listen(r *http.Request) {
-	log.Println("Incoming Request Details")
-	requestDetails := newRequestDetails(r)
-	log.Printf("%+v\n\n", requestDetails)
-
 }
