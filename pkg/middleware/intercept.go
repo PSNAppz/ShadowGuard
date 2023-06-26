@@ -10,8 +10,9 @@ import (
 // Read performs intercept operation, contacts internal server and returns response to client
 func Intercept(client *http.Client, method, url string, tasks []task.Task) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// Execute tasks
+		// Execute passive tasks NOTE: There should be a distinction between passive and active tasks at some point
 		go executeTasks(tasks, r)
+
 		defer r.Body.Close()
 		req, err := http.NewRequest(method, url, r.Body)
 		if err != nil {
