@@ -1,18 +1,18 @@
 package middleware
 
 import (
-	"AegisGuard/pkg/config"
-	"AegisGuard/pkg/monitor"
+	"AegisGuard/pkg/task"
 	"io"
 	"log"
 	"net/http"
 )
 
 // Read performs intercept operation, contacts internal server and returns response to client
-func Intercept(client *http.Client, method, url string, tasks []config.TaskType) http.HandlerFunc {
+func Intercept(client *http.Client, method, url string, tasks []task.Task) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// Execute tasks
-		go executeTasks(tasks, r)
+		// Execute passive tasks NOTE: There should be a distinction between passive and active tasks at some point
+		executeTasks(tasks, r)
+
 		defer r.Body.Close()
 		req, err := http.NewRequest(method, url, r.Body)
 		if err != nil {
@@ -34,16 +34,8 @@ func Intercept(client *http.Client, method, url string, tasks []config.TaskType)
 	}
 }
 
-func executeTasks(tasks []config.TaskType, r *http.Request) {
+func executeTasks(tasks []task.Task, r *http.Request) {
 	for _, task := range tasks {
-		switch task {
-		case config.MONITOR:
-			log.Println("Monitoring Started...")
-			monitor.Listen(r)
-		case config.CAPTURE:
-			log.Println("Capturing Started...")
-		default:
-			log.Println("No Tasks to execute")
-		}
+		task.Handle(r)
 	}
 }
