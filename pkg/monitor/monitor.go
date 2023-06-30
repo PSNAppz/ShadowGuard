@@ -16,7 +16,7 @@ func monitor(r *http.Request, settings map[string]interface{}) {
 // Performs monitoring operation and prints out the details of the request
 // TODO: Add more details to the log and store the same for future analysis
 func Handle(r *http.Request, settings map[string]interface{}) {
-	go monitor(r, settings)
+	monitor(r, settings)
 }
 
 type RequestDetails struct {
