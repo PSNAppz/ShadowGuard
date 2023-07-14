@@ -33,7 +33,10 @@ func TestIntercept(t *testing.T) {
 	defer externalServer.CloseClientConnections()
 
 	// Initiate request to external client
-	resp, err := externalClient.Get(externalServer.URL)
+	req := httptest.NewRequest(http.MethodGet, externalServer.URL, nil)
+	req.RequestURI = ""
+	req.Header["Connection"] = []string{"Keep-Alive"}
+	resp, err := externalClient.Do(req)
 	if err != nil {
 		t.Errorf("External client encountered an error while making request. %+v", err)
 	}
@@ -50,5 +53,13 @@ func TestIntercept(t *testing.T) {
 
 	if resp.StatusCode != 201 {
 		t.Errorf("Incorrect response code. Found %d", resp.StatusCode)
+	}
+
+	if connectionHeaders, found := resp.Request.Header["Connection"]; found {
+		if connectionHeaders[0] != "Keep-Alive" {
+			t.Errorf("Invalid Connection header found. Found %s, expected %s", connectionHeaders[0], "Keep-Alive")
+		}
+	} else {
+		t.Errorf("Connection header is missing from the request")
 	}
 }
