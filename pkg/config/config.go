@@ -1,25 +1,19 @@
 package config
 
 import (
+	"AegisGuard/pkg/task"
 	"encoding/json"
 	"io/ioutil"
 	"log"
 	"os"
 )
 
-type TaskType string
-
-const (
-	MONITOR TaskType = "monitor"
-	CAPTURE TaskType = "capture"
-)
-
 // Endpoint represents an external API Endpoint and its corresponding internal and
 type Endpoint struct {
-	Tasks    []TaskType `json:"tasks"`
-	Methods  []string   `json:"methods"`
-	External string     `json:"external"`
-	Internal string     `json:"internal"`
+	Tasks    []task.Task `json:"tasks"`
+	Methods  []string    `json:"methods"`
+	External string      `json:"external"`
+	Internal string      `json:"internal"`
 }
 
 // Config represents the general configuration of Aegis
