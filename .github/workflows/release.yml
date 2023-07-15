@@ -20,7 +20,7 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::$(git describe --tags $(git rev-list --tags --max-count=1) 2>/dev/null || echo v0.0.0)
+        run: echo ::set-output name=VERSION::$(git describe --tags $(git rev-list --tags --max-count=1) 2>/dev/null)
 
       - name: Generate release notes
         id: release_notes
@@ -31,7 +31,7 @@ jobs:
           echo ::set-output name=body::$(cat RELEASE_NOTES.md)
 
       - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.26.0
+        uses: anothrNick/github-tag-action@1.67.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
