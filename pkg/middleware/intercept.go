@@ -4,6 +4,7 @@ import (
 	"AegisGuard/pkg/config"
 	"AegisGuard/pkg/plugin"
 	_ "AegisGuard/plugins" // Import the plugins package to register the plugins
+	"log"
 
 	"io"
 	"net/http"
@@ -28,9 +29,8 @@ func Intercept(client *http.Client, method, url string, pluginConfigs []config.P
 				// Execute active plugins
 				err := p.Handle(r)
 				if err != nil {
-					// If an active plugin returns an error, respond with an error message and status code
-					http.Error(w, "Request blocked by plugin: "+err.Error(), http.StatusForbidden)
-					return
+					// If an active plugin returns an error, log the error message and status code
+					log.Printf("Request blocked by plugin %s. Error %s", p.GetType(), err.Error())
 				}
 			}
 		}
