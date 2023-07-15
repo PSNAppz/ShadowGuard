@@ -27,7 +27,7 @@ jobs:
         run: |
           echo 'Release Notes' > RELEASE_NOTES.md
           echo '' >> RELEASE_NOTES.md
-          git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"- %s" >> RELEASE_NOTES.md
+          git log --pretty=format:"- %s" >> RELEASE_NOTES.md
           echo ::set-output name=body::$(cat RELEASE_NOTES.md)
 
       - name: Bump version and push tag
