@@ -26,7 +26,7 @@ func TestMonitor(t *testing.T) {
 		"verbose": true,
 	}
 
-	m := NewMonitorPlugin(settings)
+	m := NewMonitorPlugin(settings, false)
 	m.Handle(req)
 
 	logged := buf.String()

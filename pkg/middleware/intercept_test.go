@@ -28,6 +28,7 @@ func TestInterceptWithActivePlugins(t *testing.T) {
 				"blacklist": []interface{}{"127.0.0.1"},
 				"whitelist": []interface{}{},
 			},
+			ActiveMode: true,
 		},
 	}
 	// create external endpoint (or client facing endpoint)

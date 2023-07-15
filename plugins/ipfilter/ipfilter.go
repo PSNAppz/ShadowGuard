@@ -9,7 +9,8 @@ import (
 )
 
 type IPFilterPlugin struct {
-	Settings map[string]interface{}
+	Settings   map[string]interface{}
+	ActiveMode bool
 }
 
 func (p *IPFilterPlugin) Handle(r *http.Request) error {
@@ -53,12 +54,12 @@ func (p *IPFilterPlugin) GetSettings() map[string]interface{} {
 	return p.Settings
 }
 
-func (p *IPFilterPlugin) GetMode() plugin.Mode {
-	return plugin.Active
+func (p *IPFilterPlugin) IsActiveMode() bool {
+	return p.ActiveMode
 }
 
-func NewIPFilterPlugin(settings map[string]interface{}) plugin.Plugin {
-	return &IPFilterPlugin{Settings: settings}
+func NewIPFilterPlugin(settings map[string]interface{}, activeMode bool) plugin.Plugin {
+	return &IPFilterPlugin{Settings: settings, ActiveMode: activeMode}
 }
 
 func init() {

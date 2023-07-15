@@ -24,7 +24,8 @@ type RequestDetails struct {
 }
 
 type MonitorPlugin struct {
-	settings map[string]interface{}
+	Settings   map[string]interface{}
+	ActiveMode bool
 }
 
 func (m *MonitorPlugin) newRequestDetails(r *http.Request) RequestDetails {
@@ -43,7 +44,7 @@ func (m *MonitorPlugin) newRequestDetails(r *http.Request) RequestDetails {
 
 func (m *MonitorPlugin) Handle(r *http.Request) error {
 	log.Println("Incoming Request Details")
-	log.Println("Settings", m.settings)
+	log.Println("Settings", m.Settings)
 	requestDetails := m.newRequestDetails(r)
 	log.Printf("%+v\n\n", requestDetails)
 	return nil
@@ -54,13 +55,13 @@ func (m *MonitorPlugin) GetType() string {
 }
 
 func (m *MonitorPlugin) GetSettings() map[string]interface{} {
-	return m.settings
+	return m.Settings
 }
 
-func (m *MonitorPlugin) GetMode() plugin.Mode {
-	return plugin.Passive
+func (m *MonitorPlugin) IsActiveMode() bool {
+	return m.ActiveMode
 }
 
-func NewMonitorPlugin(settings map[string]interface{}) plugin.Plugin {
-	return &MonitorPlugin{settings: settings}
+func NewMonitorPlugin(settings map[string]interface{}, activeMode bool) plugin.Plugin {
+	return &MonitorPlugin{Settings: settings, ActiveMode: activeMode}
 }
