@@ -9,6 +9,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
+var version = "undefined"
+
 func main() {
 	r := mux.NewRouter()
 	client := &http.Client{}
@@ -22,6 +24,7 @@ func main() {
 		}
 	}
 
+	log.Printf("Starting AegisGuard version %s\n", version)
 	log.Printf("Listening on port %s\n", "8888")
 	log.Fatal(http.ListenAndServe(":8888", r))
 }
