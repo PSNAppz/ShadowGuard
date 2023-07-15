@@ -22,9 +22,6 @@ jobs:
         id: get_version
         run: echo ::set-output name=VERSION::$(git describe --tags $(git rev-list --tags --max-count=1) 2>/dev/null)
 
-      - name: Print version again
-        run: echo ${{ steps.get_version.outputs.VERSION }}
-        
       - name: Generate release notes
         id: release_notes
         run: |
@@ -44,20 +41,21 @@ jobs:
         run: |
           go build -v -ldflags "-X main.version=${{ steps.get_version.outputs.VERSION }}" -o bin/aegisguard ./cmd
 
+      - name: Print new version
+        run: echo "The new version is ${{ steps.bump_version.outputs.new_tag }}"
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
         with:
-          tag_name: ${{ steps.get_version.outputs.VERSION }}
-          release_name: Release ${{ steps.get_version.outputs.VERSION }}
+          tag_name: ${{ steps.bump_version.outputs.new_tag }}
+          release_name: Release ${{ steps.bump_version.outputs.new_tag }}
           body: ${{ steps.release_notes.outputs.body }}
           draft: false
           prerelease: false
-      - name: Print version again
-        run: echo ${{ steps.get_version.outputs.VERSION }}
-
+      
       - name: Upload Release Asset
         id: upload_release_asset
         uses: actions/upload-release-asset@v1
