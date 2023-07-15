@@ -6,7 +6,6 @@ import (
 	_ "AegisGuard/plugins" // Import the plugins package to register the plugins
 
 	"io"
-	"log"
 	"net/http"
 )
 
@@ -20,30 +19,20 @@ func Intercept(client *http.Client, method, url string, pluginConfigs []config.P
 			return
 		}
 
-		// Separate plugins into active and passive
-		activePlugins := []plugin.Plugin{}
-		passivePlugins := []plugin.Plugin{}
+		// Execute plugins
 		for _, p := range plugins {
 			if p.GetMode() == plugin.Passive {
-				passivePlugins = append(passivePlugins, p)
+				// Execute passive plugins in separate goroutines
+				go p.Handle(r)
 			} else {
-				activePlugins = append(activePlugins, p)
+				// Execute active plugins
+				err := p.Handle(r)
+				if err != nil {
+					// If an active plugin returns an error, respond with an error message and status code
+					http.Error(w, "Request blocked by plugin: "+err.Error(), http.StatusForbidden)
+					return
+				}
 			}
-		}
-
-		// Execute active plugins
-		for _, p := range activePlugins {
-			err := p.Handle(r)
-			if err != nil {
-				// If an active plugin returns an error, respond with an error message and status code
-				http.Error(w, "Request blocked by plugin: "+err.Error(), http.StatusForbidden)
-				return
-			}
-		}
-
-		// Execute passive plugins in separate goroutines
-		for _, p := range passivePlugins {
-			go p.Handle(r)
 		}
 
 		defer r.Body.Close()
@@ -62,7 +51,6 @@ func Intercept(client *http.Client, method, url string, pluginConfigs []config.P
 		if err != nil {
 			panic(err)
 		}
-		log.Printf("OUTGOING RESPONSE: %+v\n\n", resp)
 		w.Write(respBody)
 	}
 }
