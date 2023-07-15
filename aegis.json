@@ -11,8 +11,8 @@
 		{
 			"type":"ipfilter",
 			"settings":{
-				"blacklist": ["127.0.0.1"],
-				"whitelist": ["localhost"]
+				"blacklist": ["::1", "127.0.0.1"],
+				"whitelist": []
 			}
 		}],
 		"methods": ["GET"],

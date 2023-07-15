@@ -15,13 +15,13 @@ func main() {
 	config := conf.Init()
 
 	for _, endpoint := range config.Endpoints {
-		uri := config.Host + ":" + config.Port + endpoint.Internal
+		uri := config.Host + config.Port + endpoint.Internal
 		for _, method := range endpoint.Methods {
 			interceptFunc := middleware.Intercept(client, method, uri, endpoint.Plugins)
 			r.HandleFunc(endpoint.External, interceptFunc).Methods(method)
 		}
 	}
 
-	log.Printf("Listening on port %s\n", config.Port)
-	http.ListenAndServe(config.Port, r)
+	log.Printf("Listening on port %s\n", "8888")
+	log.Fatal(http.ListenAndServe(":8888", r))
 }

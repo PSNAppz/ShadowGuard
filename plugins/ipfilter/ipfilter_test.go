@@ -9,8 +9,8 @@ import (
 func TestIPFilterPlugin(t *testing.T) {
 	// Create a new IPFilterPlugin with a blacklist
 	plugin := NewIPFilterPlugin(map[string]interface{}{
-		"blacklist": []string{"127.0.0.1"},
-		"whitelist": []string{},
+		"blacklist": []interface{}{"127.0.0.1"},
+		"whitelist": []interface{}{},
 	})
 
 	// Create a new HTTP request
@@ -24,8 +24,8 @@ func TestIPFilterPlugin(t *testing.T) {
 
 	// Update the plugin settings to include a whitelist
 	plugin = NewIPFilterPlugin(map[string]interface{}{
-		"blacklist": []string{},
-		"whitelist": []string{"127.0.0.1"},
+		"blacklist": []interface{}{},
+		"whitelist": []interface{}{"127.0.0.1"},
 	})
 
 	// Test that the IPFilterPlugin allows the request when the IP is whitelisted

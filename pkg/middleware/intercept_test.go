@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"AegisGuard/pkg/config"
-	_ "AegisGuard/plugins" // Import the plugins package to register the plugins
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -26,8 +25,8 @@ func TestInterceptWithActivePlugins(t *testing.T) {
 		{
 			Type: "ipfilter",
 			Settings: map[string]interface{}{
-				"blacklist": []string{"127.0.0.1"},
-				"whitelist": []string{},
+				"blacklist": []interface{}{"127.0.0.1"},
+				"whitelist": []interface{}{},
 			},
 		},
 	}

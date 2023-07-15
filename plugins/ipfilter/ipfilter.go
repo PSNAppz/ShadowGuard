@@ -3,6 +3,7 @@ package ipfilter
 import (
 	"AegisGuard/pkg/plugin"
 	"errors"
+	"log"
 	"net"
 	"net/http"
 )
@@ -16,8 +17,14 @@ func (p *IPFilterPlugin) Handle(r *http.Request) error {
 	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
 
 	// Get the blacklist and whitelist from the settings
-	blacklist, _ := p.Settings["blacklist"].([]string)
-	whitelist, _ := p.Settings["whitelist"].([]string)
+	blacklist, ok := p.Settings["blacklist"].([]interface{})
+	if !ok {
+		log.Println("Error: expected 'blacklist' to be a slice of interfaces")
+	}
+	whitelist, ok := p.Settings["whitelist"].([]interface{})
+	if !ok {
+		log.Println("Error: expected 'whitelist' to be a slice of interfaces")
+	}
 
 	// Check if the IP is on the blacklist
 	for _, blacklistedIP := range blacklist {

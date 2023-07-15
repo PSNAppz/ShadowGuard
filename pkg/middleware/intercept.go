@@ -3,6 +3,8 @@ package middleware
 import (
 	"AegisGuard/pkg/config"
 	"AegisGuard/pkg/plugin"
+	_ "AegisGuard/plugins" // Import the plugins package to register the plugins
+
 	"io"
 	"log"
 	"net/http"
