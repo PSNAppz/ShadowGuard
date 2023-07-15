@@ -31,16 +31,15 @@ jobs:
           echo ::set-output name=body::$(cat RELEASE_NOTES.md)
 
       - name: Bump version and push tag
-        id: github_tag_action
         uses: anothrNick/github-tag-action@1.26.0
         env:
-          GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
           DEFAULT_BUMP: patch
 
       - name: Build Go with version info
         run: |
-          go build -v -ldflags "-X main.version=${{ steps.github_tag_action.outputs.new_tag }}" -o bin/aegisguard ./cmd
+          go build -v -ldflags "-X main.version=${{ steps.get_version.outputs.VERSION }}" -o bin/aegisguard ./cmd
 
       - name: Create Release
         id: create_release
@@ -48,8 +47,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
         with:
-          tag_name: ${{ steps.github_tag_action.outputs.new_tag }}
-          release_name: Release ${{ steps.github_tag_action.outputs.new_tag }}
+          tag_name: ${{ steps.get_version.outputs.VERSION }}
+          release_name: Release ${{ steps.get_version.outputs.VERSION }}
           body: ${{ steps.release_notes.outputs.body }}
           draft: false
           prerelease: false
