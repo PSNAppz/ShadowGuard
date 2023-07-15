@@ -31,6 +31,11 @@ func Intercept(client *http.Client, method, url string, pluginConfigs []config.P
 			}
 		}
 
+		// Execute passive plugins in separate goroutines
+		for _, p := range passivePlugins {
+			go p.Handle(r)
+		}
+
 		// Execute active plugins
 		for _, p := range activePlugins {
 			err := p.Handle(r)
@@ -40,11 +45,6 @@ func Intercept(client *http.Client, method, url string, pluginConfigs []config.P
 				http.Error(w, "Request blocked by plugin: "+err.Error(), http.StatusForbidden)
 				return
 			}
-		}
-
-		// Execute passive plugins in separate goroutines
-		for _, p := range passivePlugins {
-			go p.Handle(r)
 		}
 
 		defer r.Body.Close()
