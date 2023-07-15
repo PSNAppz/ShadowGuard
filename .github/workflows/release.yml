@@ -20,9 +20,7 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: |
-          git describe --tags --abbrev=0
-          echo "::set-output name=VERSION::$(git describe --tags --abbrev=0 2>/dev/null || echo v0.0.0)"
+        run: echo ::set-output name=VERSION::$(git describe --tags $(git rev-list --tags --max-count=1) 2>/dev/null || echo v0.0.0)
 
       - name: Generate release notes
         id: release_notes
