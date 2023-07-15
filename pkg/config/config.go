@@ -1,19 +1,24 @@
 package config
 
 import (
-	"AegisGuard/pkg/task"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 )
 
-// Endpoint represents an external API Endpoint and its corresponding internal and
+// PluginConfig represents the configuration for a single plugin
+type PluginConfig struct {
+	Type     string                 `json:"type"`
+	Settings map[string]interface{} `json:"settings"`
+}
+
+// Endpoint represents an external API Endpoint and its corresponding internal endpoint
 type Endpoint struct {
-	Tasks    []task.Task `json:"tasks"`
-	Methods  []string    `json:"methods"`
-	External string      `json:"external"`
-	Internal string      `json:"internal"`
+	Plugins  []PluginConfig `json:"plugins"`
+	Methods  []string       `json:"methods"`
+	External string         `json:"external"`
+	Internal string         `json:"internal"`
 }
 
 // Config represents the general configuration of Aegis
@@ -23,7 +28,8 @@ type Config struct {
 	Endpoints []Endpoint `json:"endpoints"`
 }
 
-// Config file path can be set dynamically using environment variables.
+// Init initializes the configuration from a file.
+// The config file path can be set dynamically using environment variables.
 // The default is assumed to be `aegis.json` in the same directory.
 func Init() *Config {
 	configFilePath := os.Getenv("AEGIS_CONFIG")
@@ -37,7 +43,7 @@ func Init() *Config {
 		panic(err)
 	}
 	defer configJsonFile.Close()
-	byteData, err := ioutil.ReadAll(configJsonFile)
+	byteData, err := io.ReadAll(configJsonFile)
 	if err != nil {
 		panic(err)
 	}

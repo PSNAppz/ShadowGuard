@@ -15,10 +15,10 @@ func main() {
 	config := conf.Init()
 
 	for _, endpoint := range config.Endpoints {
-		uri := config.Host + config.Port + endpoint.Internal
+		uri := config.Host + ":" + config.Port + endpoint.Internal
 		for _, method := range endpoint.Methods {
-			monitorFunc := middleware.Intercept(client, method, uri, endpoint.Tasks)
-			r.HandleFunc(endpoint.External, monitorFunc)
+			interceptFunc := middleware.Intercept(client, method, uri, endpoint.Plugins)
+			r.HandleFunc(endpoint.External, interceptFunc).Methods(method)
 		}
 	}
 
