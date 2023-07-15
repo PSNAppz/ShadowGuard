@@ -2,11 +2,20 @@
 	"host": "http://localhost",
 	"port": ":8081",
 	"endpoints": [{
-		"tasks": [{
+		"plugins": [{
 			"type": "monitor",
 			"settings": {
 				"verbose": true
-			}
+			},
+			"active_mode": false
+		},
+		{
+			"type":"ipfilter",
+			"settings":{
+				"blacklist": ["::1", "127.0.0.1"],
+				"whitelist": []
+			},
+			"active_mode": true
 		}],
 		"methods": ["GET"],
 		"external": "/external",

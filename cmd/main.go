@@ -9,6 +9,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
+var version = "undefined"
+
 func main() {
 	r := mux.NewRouter()
 	client := &http.Client{}
@@ -17,11 +19,12 @@ func main() {
 	for _, endpoint := range config.Endpoints {
 		uri := config.Host + config.Port + endpoint.Internal
 		for _, method := range endpoint.Methods {
-			monitorFunc := middleware.Intercept(client, method, uri, endpoint.Tasks)
-			r.HandleFunc(endpoint.External, monitorFunc)
+			interceptFunc := middleware.Intercept(client, method, uri, endpoint.Plugins)
+			r.HandleFunc(endpoint.External, interceptFunc).Methods(method)
 		}
 	}
 
-	log.Printf("Listening on port %s\n", config.Port)
-	http.ListenAndServe(config.Port, r)
+	log.Printf("Starting AegisGuard version %s\n", version)
+	log.Printf("Listening on port %s\n", "8888")
+	log.Fatal(http.ListenAndServe(":8888", r))
 }

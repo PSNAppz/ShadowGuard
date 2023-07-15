@@ -1,0 +1,67 @@
+package monitor
+
+import (
+	"AegisGuard/pkg/plugin"
+	"io"
+	"log"
+	"net/http"
+)
+
+// Register this plugin in the plugin package
+func init() {
+	plugin.RegisterPlugin("monitor", NewMonitorPlugin)
+}
+
+type RequestDetails struct {
+	Method           string
+	URL              string
+	Header           http.Header
+	Body             io.ReadCloser
+	Host             string
+	RemoteAddr       string
+	ContentLength    int64
+	TransferEncoding []string
+}
+
+type MonitorPlugin struct {
+	Settings   map[string]interface{}
+	ActiveMode bool
+}
+
+func (m *MonitorPlugin) newRequestDetails(r *http.Request) RequestDetails {
+	requestDetails := RequestDetails{
+		Method:           r.Method,
+		URL:              r.URL.String(),
+		Header:           r.Header,
+		Body:             r.Body,
+		Host:             r.Host,
+		RemoteAddr:       r.RemoteAddr,
+		ContentLength:    r.ContentLength,
+		TransferEncoding: r.TransferEncoding,
+	}
+	return requestDetails
+}
+
+func (m *MonitorPlugin) Handle(r *http.Request) error {
+	log.Println("Incoming Request Details")
+	log.Println("Settings", m.Settings)
+	requestDetails := m.newRequestDetails(r)
+	log.Printf("%+v\n\n", requestDetails)
+	return nil
+}
+
+func (m *MonitorPlugin) GetType() string {
+	return "monitor"
+}
+
+func (m *MonitorPlugin) GetSettings() map[string]interface{} {
+	return m.Settings
+}
+
+func (m *MonitorPlugin) IsActiveMode() bool {
+	return m.ActiveMode
+}
+
+func NewMonitorPlugin(settings map[string]interface{}, activeMode bool) plugin.Plugin {
+	return &MonitorPlugin{Settings: settings, ActiveMode: activeMode}
+}

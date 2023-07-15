@@ -5,12 +5,12 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 )
 
-func TestIntercept(t *testing.T) {
+func TestInterceptWithActivePlugins(t *testing.T) {
 	// create internal endpoint (or API endpoint)
-	// this will be contacted by the Intercept function
 	internalServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(201)
 		w.Write([]byte("Internal server reached."))
@@ -21,12 +21,75 @@ func TestIntercept(t *testing.T) {
 	defer internalServer.CloseClientConnections()
 
 	method := "GET"
-	tasks := []config.TaskType{
-		config.MONITOR,
+	pluginConfigs := []config.PluginConfig{
+		{
+			Type: "ipfilter",
+			Settings: map[string]interface{}{
+				"blacklist": []interface{}{"127.0.0.1"},
+				"whitelist": []interface{}{},
+			},
+			ActiveMode: true,
+		},
 	}
 	// create external endpoint (or client facing endpoint)
-	// this will be contacted using the client
-	externalServer := httptest.NewServer(Intercept(internalClient, method, internalServer.URL, tasks))
+	externalServer := httptest.NewServer(Intercept(internalClient, method, internalServer.URL, pluginConfigs))
+	defer externalServer.Close()
+
+	externalClient := externalServer.Client()
+	defer externalServer.CloseClientConnections()
+
+	// Initiate request to external client
+	req := httptest.NewRequest(http.MethodGet, externalServer.URL, nil)
+	req.RemoteAddr = "127.0.0.1:80" // httptest creates 127.0.0.1:random_port
+	req.RequestURI = ""
+	req.Header["Connection"] = []string{"Keep-Alive"}
+	resp, err := externalClient.Do(req)
+	if err != nil {
+		t.Errorf("External client encountered an error while making request. %+v", err)
+	}
+
+	defer resp.Body.Close()
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		t.Errorf("Unable to read response body from external client. %+v", err)
+	}
+
+	respBodyStr := strings.TrimSpace(string(respBody))
+	if resp.StatusCode != http.StatusForbidden {
+		t.Errorf("Incorrect response code for blocked IP. Found %d", resp.StatusCode)
+	} else if respBodyStr != "Request blocked by plugin: IP address is blacklisted" {
+		t.Errorf("Unexpected response body when IP is blacklisted. Found %s", respBodyStr)
+	}
+
+	if connectionHeaders, found := resp.Request.Header["Connection"]; found {
+		if connectionHeaders[0] != "Keep-Alive" {
+			t.Errorf("Invalid Connection header found. Found %s, expected %s", connectionHeaders[0], "Keep-Alive")
+		}
+	} else {
+		t.Errorf("Connection header is missing from the request")
+	}
+}
+
+func TestInterceptWithPassivePlugins(t *testing.T) {
+	// create internal endpoint (or API endpoint)
+	internalServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(201)
+		w.Write([]byte("Internal server reached."))
+	}))
+	defer internalServer.Close()
+
+	internalClient := internalServer.Client()
+	defer internalServer.CloseClientConnections()
+
+	method := "GET"
+	pluginConfigs := []config.PluginConfig{
+		{
+			Type:     "monitor",
+			Settings: map[string]interface{}{"verbose": true},
+		},
+	}
+	// create external endpoint (or client facing endpoint)
+	externalServer := httptest.NewServer(Intercept(internalClient, method, internalServer.URL, pluginConfigs))
 	defer externalServer.Close()
 
 	externalClient := externalServer.Client()
@@ -47,12 +110,12 @@ func TestIntercept(t *testing.T) {
 		t.Errorf("Unable to read response body from external client. %+v", err)
 	}
 
-	if string(respBody) != "Internal server reached." {
-		t.Errorf("Incorrect response returned. Found %s", respBody)
-	}
+	respBodyStr := strings.TrimSpace(string(respBody))
 
-	if resp.StatusCode != 201 {
+	if resp.StatusCode != http.StatusCreated {
 		t.Errorf("Incorrect response code. Found %d", resp.StatusCode)
+	} else if respBodyStr != "Internal server reached." {
+		t.Errorf("Incorrect response returned. Found %s", respBodyStr)
 	}
 
 	if connectionHeaders, found := resp.Request.Header["Connection"]; found {
