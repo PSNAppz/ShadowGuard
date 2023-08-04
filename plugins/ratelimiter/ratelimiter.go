@@ -1,10 +1,15 @@
-package main
+package ratelimiter
 
 import (
 	"AegisGuard/pkg/plugin"
 	"net/http"
 	"time"
 )
+
+// Register this plugin in the plugin package
+func init() {
+	plugin.RegisterPlugin("ratelimiter", NewRateLimiterPlugin)
+}
 
 type RateLimiter struct {
 	rate     int           // requests per second
@@ -65,7 +70,7 @@ func (r *RateLimiterPlugin) IsActiveMode() bool {
 }
 
 // Register the RateLimiter plugin in the plugin registry.
-func NewRateLimiterPlugin(settings map[string]interface{}, activeMode bool) plugin {
+func NewRateLimiterPlugin(settings map[string]interface{}, activeMode bool) plugin.Plugin {
 	rate := int(settings["rate"].(float64))
 	limiter := NewRateLimiter(rate)
 	go limiter.Start()
