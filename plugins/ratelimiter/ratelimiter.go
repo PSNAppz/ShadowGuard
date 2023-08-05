@@ -1,8 +1,8 @@
 package ratelimiter
 
 import (
-	"AegisGuard/pkg/plugin"
 	"net/http"
+	"shadowguard/pkg/plugin"
 	"time"
 )
 

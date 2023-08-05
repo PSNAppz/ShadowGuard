@@ -1,10 +1,10 @@
 package monitor
 
 import (
-	"AegisGuard/pkg/plugin"
 	"io"
 	"log"
 	"net/http"
+	"shadowguard/pkg/plugin"
 )
 
 // Register this plugin in the plugin package

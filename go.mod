@@ -1,4 +1,4 @@
-module AegisGuard
+module shadowguard
 
 go 1.20
 

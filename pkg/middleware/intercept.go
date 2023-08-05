@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"AegisGuard/pkg/config"
-	"AegisGuard/pkg/plugin"
-	_ "AegisGuard/plugins" // Import the plugins package to register the plugins
+	"shadowguard/pkg/config"
+	"shadowguard/pkg/plugin"
+	_ "shadowguard/plugins" // Import the plugins package to register the plugins
 
 	"io"
 	"log"
