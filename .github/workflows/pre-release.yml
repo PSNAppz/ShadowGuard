@@ -25,11 +25,10 @@ jobs:
       - name: Generate release notes
         id: release_notes
         run: |
-          echo 'Release Notes' > RELEASE_NOTES.md
-          echo '' >> RELEASE_NOTES.md
-          git log --pretty=format:"- %s" >> RELEASE_NOTES.md
-          echo 'body=' >> $GITHUB_ENV
-          cat RELEASE_NOTES.md >> $GITHUB_ENV
+            echo 'Release Notes' > RELEASE_NOTES.md
+            echo '' >> RELEASE_NOTES.md
+            git log --pretty=format:"- %s" >> RELEASE_NOTES.md
+            echo "body=$(cat RELEASE_NOTES.md | base64)" >> $GITHUB_ENV
 
       - name: Bump version and push tag
         id: bump_version
@@ -54,7 +53,7 @@ jobs:
         with:
           tag_name: ${{ steps.bump_version.outputs.new_tag }}
           release_name: Release ${{ steps.bump_version.outputs.new_tag }}
-          body: ${{ env.body }}
+          body: ${{ steps.run_script.outputs.stdout }}
           draft: false
           prerelease: true
       
