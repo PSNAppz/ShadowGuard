@@ -22,7 +22,7 @@ type Endpoint struct {
 	Internal string         `json:"internal"`
 }
 
-// Config represents the general configuration of Aegis
+// Config represents the general configuration of ShadowGuard
 type Config struct {
 	Host      string     `json:"host"`
 	Port      string     `json:"port"`
@@ -31,11 +31,11 @@ type Config struct {
 
 // Init initializes the configuration from a file.
 // The config file path can be set dynamically using environment variables.
-// The default is assumed to be `aegis.json` in the same directory.
+// The default is assumed to be `config.json` in the same directory.
 func Init() *Config {
-	configFilePath := os.Getenv("AEGIS_CONFIG")
+	configFilePath := os.Getenv("SHADOW_CONFIG")
 	if configFilePath == "" {
-		configFilePath = "aegis.json"
+		configFilePath = "config.json"
 	}
 
 	log.Printf("Reading configuration file %s\n", configFilePath)
