@@ -12,25 +12,23 @@ import (
 
 // Intercept performs intercept operation, contacts internal server and returns response to client
 func Intercept(client *http.Client, method, url string, pluginConfigs []config.PluginConfig) http.HandlerFunc {
+	// Convert PluginConfigs to Plugins
+	plugins, err := createPlugins(pluginConfigs)
+	if err != nil {
+		panic(err)
+	}
+	// Separate plugins into active and passive
+	activePlugins := []plugin.Plugin{}
+	passivePlugins := []plugin.Plugin{}
+	for _, p := range plugins {
+		if p.IsActiveMode() {
+			activePlugins = append(activePlugins, p)
+		} else {
+			passivePlugins = append(passivePlugins, p)
+		}
+	}
+
 	return func(w http.ResponseWriter, r *http.Request) {
-		// Convert PluginConfigs to Plugins
-		plugins, err := createPlugins(pluginConfigs)
-		if err != nil {
-			http.Error(w, "Error creating plugins: "+err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		// Separate plugins into active and passive
-		activePlugins := []plugin.Plugin{}
-		passivePlugins := []plugin.Plugin{}
-		for _, p := range plugins {
-			if p.IsActiveMode() {
-				activePlugins = append(activePlugins, p)
-			} else {
-				passivePlugins = append(passivePlugins, p)
-			}
-		}
-
 		// Execute passive plugins in separate goroutines
 		for _, p := range passivePlugins {
 			go p.Handle(r)

@@ -10,10 +10,9 @@
 			"active_mode": false
 		},
 		{
-			"type":"ipfilter",
+			"type":"ratelimiter",
 			"settings":{
-				"blacklist": ["::1", "127.0.0.1"],
-				"whitelist": []
+				"rate": 1
 			},
 			"active_mode": true
 		}],
