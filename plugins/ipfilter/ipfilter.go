@@ -1,11 +1,11 @@
 package ipfilter
 
 import (
-	"AegisGuard/pkg/plugin"
 	"errors"
 	"log"
 	"net"
 	"net/http"
+	"shadowguard/pkg/plugin"
 )
 
 type IPFilterPlugin struct {

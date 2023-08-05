@@ -1,10 +1,10 @@
 package main
 
 import (
-	conf "AegisGuard/pkg/config"
-	"AegisGuard/pkg/middleware"
 	"log"
 	"net/http"
+	conf "shadowguard/pkg/config"
+	"shadowguard/pkg/middleware"
 
 	"github.com/gorilla/mux"
 )
@@ -24,7 +24,7 @@ func main() {
 		}
 	}
 
-	log.Printf("Starting AegisGuard version %s\n", version)
+	log.Printf("Starting shadowguard version %s\n", version)
 	log.Printf("Listening on port %s\n", config.Port)
 	log.Fatal(http.ListenAndServe(config.Port, r))
 }

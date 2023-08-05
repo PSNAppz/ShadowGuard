@@ -3,7 +3,7 @@
 package plugins
 
 import (
-	_ "AegisGuard/plugins/ipfilter"
-	_ "AegisGuard/plugins/monitor"
-	_ "AegisGuard/plugins/ratelimiter"
+	_ "shadowguard/plugins/ipfilter"
+	_ "shadowguard/plugins/monitor"
+	_ "shadowguard/plugins/ratelimiter"
 )

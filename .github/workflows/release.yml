@@ -40,7 +40,7 @@ jobs:
 
       - name: Build Go with version info
         run: |
-          go build -v -ldflags "-X main.version=${{ steps.get_version.outputs.VERSION }}" -o bin/aegisguard ./cmd
+          go build -v -ldflags "-X main.version=${{ steps.get_version.outputs.VERSION }}" -o bin/shadowguard ./cmd
 
       - name: Print new version
         run: echo "The new version is ${{ steps.bump_version.outputs.new_tag }}"
@@ -64,6 +64,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./bin/aegisguard
-          asset_name: aegisguard-${{ steps.get_version.outputs.VERSION }}
+          asset_path: ./bin/shadowguard
+          asset_name: shadowguard-${{ steps.get_version.outputs.VERSION }}
           asset_content_type: application/octet-stream

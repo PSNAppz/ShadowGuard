@@ -1,10 +1,10 @@
 package middleware
 
 import (
-	"AegisGuard/pkg/config"
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"shadowguard/pkg/config"
 	"strings"
 	"testing"
 )
