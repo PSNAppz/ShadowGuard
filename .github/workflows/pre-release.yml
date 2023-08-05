@@ -1,9 +1,9 @@
-name: Release
+name: Pre Release
 
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
   release:
@@ -36,7 +36,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
           WITH_V: true
-          DEFAULT_BUMP: minor
+          DEFAULT_BUMP: patch
 
       - name: Build Go with version info
         run: |
@@ -55,7 +55,7 @@ jobs:
           release_name: Release ${{ steps.bump_version.outputs.new_tag }}
           body: ${{ steps.run_script.outputs.stdout }}
           draft: false
-          prerelease: false
+          prerelease: true
       
       - name: Upload Release Asset
         id: upload_release_asset
