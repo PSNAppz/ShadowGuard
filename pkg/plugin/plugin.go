@@ -11,6 +11,8 @@ type Plugin interface {
 	GetType() string
 	GetSettings() map[string]interface{}
 	IsActiveMode() bool
+	Notify(message string)
+	SetReceivers(receivers []NotificationReceiver)
 }
 
 // PluginFactory is a function that creates a Plugin.

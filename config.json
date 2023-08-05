@@ -12,8 +12,14 @@
 		{
 			"type":"ratelimiter",
 			"settings":{
-				"rate": 1
+				"rate": 1,
+				"notify": [{
+					"type": "slack",
+					"token": "xoxb-198202255696-5682091092327-m8IHyjQEnO6FdIIslpzjq2nz",
+					"channelID": "C5UTW0J6N"
+				}]
 			},
+
 			"active_mode": true
 		}],
 		"methods": ["GET"],

@@ -2,6 +2,7 @@ package ratelimiter
 
 import (
 	"net/http"
+	"shadowguard/pkg/config"
 	"shadowguard/pkg/plugin"
 	"time"
 )
@@ -46,10 +47,15 @@ type RateLimiterPlugin struct {
 	limiter    *RateLimiter
 	Settings   map[string]interface{}
 	ActiveMode bool
+	receivers  []plugin.NotificationReceiver
 }
 
 // Handle handles the incoming request and applies rate limiting.
 func (r *RateLimiterPlugin) Handle(req *http.Request) error {
+	if len(r.limiter.limiter) == 0 {
+		r.Notify("request is being rate limited")
+	}
+
 	r.limiter.Wait()
 	return nil
 }
@@ -69,10 +75,20 @@ func (r *RateLimiterPlugin) IsActiveMode() bool {
 	return r.ActiveMode
 }
 
+func (r *RateLimiterPlugin) Notify(message string) {
+	plugin.SendNotification(message, r.receivers...)
+}
+
+func (r *RateLimiterPlugin) SetReceivers(receivers []plugin.NotificationReceiver) {
+	r.receivers = receivers
+}
+
 // Register the RateLimiter plugin in the plugin registry.
 func NewRateLimiterPlugin(settings map[string]interface{}, activeMode bool) plugin.Plugin {
 	rate := int(settings["rate"].(float64))
 	limiter := NewRateLimiter(rate)
 	go limiter.Start()
-	return &RateLimiterPlugin{limiter: limiter, Settings: settings, ActiveMode: activeMode}
+	limiterPlugin := &RateLimiterPlugin{limiter: limiter, Settings: settings, ActiveMode: activeMode}
+	config.RegisterSettings(limiterPlugin)
+	return limiterPlugin
 }

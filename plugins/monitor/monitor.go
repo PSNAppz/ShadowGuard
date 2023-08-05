@@ -4,6 +4,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"shadowguard/pkg/config"
 	"shadowguard/pkg/plugin"
 )
 
@@ -26,6 +27,7 @@ type RequestDetails struct {
 type MonitorPlugin struct {
 	Settings   map[string]interface{}
 	ActiveMode bool
+	receivers  []plugin.NotificationReceiver
 }
 
 func (m *MonitorPlugin) newRequestDetails(r *http.Request) RequestDetails {
@@ -62,6 +64,16 @@ func (m *MonitorPlugin) IsActiveMode() bool {
 	return m.ActiveMode
 }
 
+func (m *MonitorPlugin) Notify(message string) {
+	plugin.SendNotification(message, m.receivers...)
+}
+
+func (m *MonitorPlugin) SetReceivers(receivers []plugin.NotificationReceiver) {
+	m.receivers = receivers
+}
+
 func NewMonitorPlugin(settings map[string]interface{}, activeMode bool) plugin.Plugin {
-	return &MonitorPlugin{Settings: settings, ActiveMode: activeMode}
+	m := &MonitorPlugin{Settings: settings, ActiveMode: activeMode}
+	config.RegisterSettings(m)
+	return m
 }
