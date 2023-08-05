@@ -38,9 +38,17 @@ jobs:
           WITH_V: true
           DEFAULT_BUMP: patch
 
-      - name: Build Go with version info
+      - name: Build Linux release
         run: |
-          go build -v -ldflags "-X main.version=${{ steps.bump_version.outputs.new_tag }}" -o bin/shadowguard ./cmd
+          GOOS=linux GOARCH=amd64 go build -v -ldflags "-X main.version=${{ steps.bump_version.outputs.new_tag }}" -o bin/shadowguard-linux ./cmd
+       
+      - name: Build macOS release
+        run: |
+            GOOS=darwin GOARCH=amd64 go build -v -ldflags "-X main.version=${{ steps.bump_version.outputs.new_tag }}" -o bin/shadowguard-macos ./cmd
+      
+      - name: Build Windows release
+        run: |
+            GOOS=windows GOARCH=amd64 go build -v -ldflags "-X main.version=${{ steps.bump_version.outputs.new_tag }}" -o bin/shadowguard.exe ./cmd
 
       - name: Print new version
         run: echo "The new version is ${{ steps.bump_version.outputs.new_tag }}"
@@ -57,13 +65,35 @@ jobs:
           draft: false
           prerelease: true
       
-      - name: Upload Release Asset
-        id: upload_release_asset
+      - name: Upload Linux Asset
+        id: upload_linux_asset
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./bin/shadowguard
-          asset_name: shadowguard-${{ steps.bump_version.outputs.new_tag }}
-          asset_content_type: application/octet-stream
+            upload_url: ${{ steps.create_release.outputs.upload_url }}
+            asset_path: ./bin/shadowguard-linux
+            asset_name: shadowguard-linux-${{ steps.bump_version.outputs.new_tag }}
+            asset_content_type: application/octet-stream
+        
+      - name: Upload macOS Asset
+        id: upload_macos_asset
+        uses: actions/upload-release-asset@v1
+        env:
+            GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
+        with:
+            upload_url: ${{ steps.create_release.outputs.upload_url }}
+            asset_path: ./bin/shadowguard-macos
+            asset_name: shadowguard-macos-${{ steps.bump_version.outputs.new_tag }}
+            asset_content_type: application/octet-stream
+    
+      - name: Upload Windows Asset
+        id: upload_windows_asset
+        uses: actions/upload-release-asset@v1
+        env:
+            GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
+        with:
+            upload_url: ${{ steps.create_release.outputs.upload_url }}
+            asset_path: ./bin/shadowguard.exe
+            asset_name: shadowguard-windows-${{ steps.bump_version.outputs.new_tag }}
+            asset_content_type: application/octet-stream
