@@ -25,11 +25,10 @@ jobs:
       - name: Generate release notes
         id: release_notes
         run: |
-          echo 'Release Notes' > RELEASE_NOTES.md
-          echo '' >> RELEASE_NOTES.md
-          git log --pretty=format:"- %s" >> RELEASE_NOTES.md
-          echo 'body=' >> $GITHUB_ENV
-          cat RELEASE_NOTES.md >> $GITHUB_ENV
+            echo 'Release Notes' > RELEASE_NOTES.md
+            echo '' >> RELEASE_NOTES.md
+            git log --pretty=format:"- %s" >> RELEASE_NOTES.md
+            echo "body=$(cat RELEASE_NOTES.md | base64)" >> $GITHUB_ENV
 
       - name: Bump version and push tag
         id: bump_version
@@ -41,7 +40,7 @@ jobs:
 
       - name: Build Go with version info
         run: |
-          go build -v -ldflags "-X main.version=${{ steps.get_version.outputs.VERSION }}" -o bin/shadowguard ./cmd
+          go build -v -ldflags "-X main.version=${{ steps.bump_version.outputs.new_tag }}" -o bin/shadowguard ./cmd
 
       - name: Print new version
         run: echo "The new version is ${{ steps.bump_version.outputs.new_tag }}"
@@ -54,7 +53,7 @@ jobs:
         with:
           tag_name: ${{ steps.bump_version.outputs.new_tag }}
           release_name: Release ${{ steps.bump_version.outputs.new_tag }}
-          body: ${{ steps.release_notes.outputs.body }}
+          body: ${{ steps.run_script.outputs.stdout }}
           draft: false
           prerelease: false
       
@@ -66,5 +65,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./bin/shadowguard
-          asset_name: shadowguard-${{ steps.get_version.outputs.VERSION }}
+          asset_name: shadowguard-${{ steps.bump_version.outputs.new_tag }}
           asset_content_type: application/octet-stream

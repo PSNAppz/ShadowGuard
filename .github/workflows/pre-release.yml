@@ -40,7 +40,7 @@ jobs:
 
       - name: Build Go with version info
         run: |
-          go build -v -ldflags "-X main.version=${{ env.VERSION }}" -o bin/shadowguard ./cmd
+          go build -v -ldflags "-X main.version=${{ steps.bump_version.outputs.new_tag }}" -o bin/shadowguard ./cmd
 
       - name: Print new version
         run: echo "The new version is ${{ steps.bump_version.outputs.new_tag }}"
@@ -65,5 +65,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./bin/shadowguard
-          asset_name: shadowguard-${{ env.VERSION }}
+          asset_name: shadowguard-${{ steps.bump_version.outputs.new_tag }}
           asset_content_type: application/octet-stream
