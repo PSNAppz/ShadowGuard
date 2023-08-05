@@ -24,7 +24,7 @@ func main() {
 		}
 	}
 
-	log.Printf("Starting shadowguard version %s\n", version)
+	log.Printf("Starting ShadowGuard v %s\n", version)
 	log.Printf("Listening on port %s\n", config.Port)
 	log.Fatal(http.ListenAndServe(config.Port, r))
 }
