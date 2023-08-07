@@ -80,14 +80,6 @@ func (p *IPFilterPlugin) Handle(r *http.Request) error {
 		}
 	}
 
-	// Check if the IP is on the whitelist
-	for _, whitelistedIP := range p.whitelist {
-		if ip == whitelistedIP {
-			// If the IP is on the whitelist, do nothing and let the request continue
-			return nil
-		}
-	}
-
-	// If the IP is not on either list, allow the request to continue
+	// Return nil if the IP is on the whitelist and if it is not
 	return nil
 }
