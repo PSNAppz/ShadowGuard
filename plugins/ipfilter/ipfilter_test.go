@@ -39,8 +39,8 @@ func TestIPFilterPlugin(t *testing.T) {
 	// Update the plugin settings to include neither a whitelist nor a blacklist
 	plugin = NewIPFilterPlugin(map[string]interface{}{
 		"active_mode": true,
-		"blacklist":   []string{},
-		"whitelist":   []string{},
+		"blacklist":   []interface{}{},
+		"whitelist":   []interface{}{},
 	})
 
 	// Test that the IPFilterPlugin allows the request when the IP is neither whitelisted nor blacklisted
