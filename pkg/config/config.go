@@ -5,7 +5,6 @@ import (
 	"io"
 	"log"
 	"os"
-	"shadowguard/pkg/plugin"
 )
 
 // PluginConfig represents the configuration for a single plugin
@@ -54,35 +53,4 @@ func Init() *Config {
 	json.Unmarshal(byteData, &config)
 	log.Printf("Configuration file loaded. %+v\n", config)
 	return &config
-}
-
-func RegisterSettings(p plugin.Plugin) {
-	settings := p.GetSettings()
-	_, ok := settings["notify"]
-	// no one to noitfy
-	if !ok {
-		return
-	}
-
-	notificationInterfaceList, ok := settings["notify"].([]interface{})
-	if !ok {
-		panic("")
-		//panic(fmt.Errorf("notification list incorrectly configured, found %+v", notificationSettingsInterface))
-	}
-
-	notificationSettings := []map[string]interface{}{}
-	for _, notificationInterface := range notificationInterfaceList {
-		notificationSetting, ok := notificationInterface.(map[string]interface{})
-		if !ok {
-			panic("")
-			//panic(fmt.Errorf("notification list incorrectly configured, found %+v", notificationSettingsInterface))
-		}
-		notificationSettings = append(notificationSettings, notificationSetting)
-	}
-
-	receiverList, err := plugin.ParseReceivers(notificationSettings)
-	if err != nil {
-		panic(err)
-	}
-	p.SetReceivers(receiverList)
 }

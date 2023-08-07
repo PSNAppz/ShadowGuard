@@ -1,9 +1,10 @@
 package ratelimiter
 
 import (
+	"log"
 	"net/http"
-	"shadowguard/pkg/config"
 	"shadowguard/pkg/plugin"
+	"shadowguard/pkg/receiver"
 	"time"
 )
 
@@ -13,33 +14,33 @@ func init() {
 }
 
 type RateLimiter struct {
-	rate     int           // requests per second
-	interval time.Duration // time interval between requests
-	ticker   *time.Ticker
-	limiter  chan struct{}
+	rate        int           // requests per second
+	interval    time.Duration // time interval between requests
+	ticker      *time.Ticker
+	requestChan chan struct{}
 }
 
 // NewRateLimiter creates a new rate limiter with the given rate (requests per second).
 func NewRateLimiter(rate int) *RateLimiter {
 	interval := time.Second / time.Duration(rate)
 	return &RateLimiter{
-		rate:     rate,
-		interval: interval,
-		ticker:   time.NewTicker(interval),
-		limiter:  make(chan struct{}, rate),
+		rate:        rate,
+		interval:    interval,
+		ticker:      time.NewTicker(interval),
+		requestChan: make(chan struct{}, rate),
 	}
 }
 
 // Start starts the rate limiter. It should be called before making requests.
 func (rl *RateLimiter) Start() {
 	for range rl.ticker.C {
-		rl.limiter <- struct{}{}
+		rl.requestChan <- struct{}{}
 	}
 }
 
 // Wait blocks until the rate limiter allows the next request.
 func (rl *RateLimiter) Wait() {
-	<-rl.limiter
+	<-rl.requestChan
 }
 
 // RateLimiterPlugin implements the Plugin interface for rate limiting.
@@ -47,12 +48,13 @@ type RateLimiterPlugin struct {
 	limiter    *RateLimiter
 	Settings   map[string]interface{}
 	ActiveMode bool
-	receivers  []plugin.NotificationReceiver
+	Receivers  []receiver.NotificationReceiver
 }
 
 // Handle handles the incoming request and applies rate limiting.
 func (r *RateLimiterPlugin) Handle(req *http.Request) error {
-	if len(r.limiter.limiter) == 0 {
+	// if the request channel is zero, there are no tokens in the bucket e.g. rate is being limited
+	if len(r.limiter.requestChan) == 0 {
 		r.Notify("request is being rate limited")
 	}
 
@@ -76,19 +78,33 @@ func (r *RateLimiterPlugin) IsActiveMode() bool {
 }
 
 func (r *RateLimiterPlugin) Notify(message string) {
-	plugin.SendNotification(message, r.receivers...)
-}
-
-func (r *RateLimiterPlugin) SetReceivers(receivers []plugin.NotificationReceiver) {
-	r.receivers = receivers
+	for _, receiver := range r.Receivers {
+		err := receiver.Notify(message)
+		if err != nil {
+			log.Printf("Unable to notify receiver")
+		}
+	}
 }
 
 // Register the RateLimiter plugin in the plugin registry.
-func NewRateLimiterPlugin(settings map[string]interface{}, activeMode bool) plugin.Plugin {
-	rate := int(settings["rate"].(float64))
+func NewRateLimiterPlugin(pluginSettings map[string]interface{}, activeMode bool) plugin.Plugin {
+	rate := int(pluginSettings["rate"].(float64))
+
 	limiter := NewRateLimiter(rate)
+
+	receivers, err := receiver.CreateReceivers(pluginSettings)
+	if err != nil {
+		panic(err)
+	}
+
+	limiterPlugin := &RateLimiterPlugin{
+		limiter:    limiter,
+		Settings:   pluginSettings,
+		ActiveMode: activeMode,
+		Receivers:  receivers,
+	}
+
 	go limiter.Start()
-	limiterPlugin := &RateLimiterPlugin{limiter: limiter, Settings: settings, ActiveMode: activeMode}
-	config.RegisterSettings(limiterPlugin)
+
 	return limiterPlugin
 }
