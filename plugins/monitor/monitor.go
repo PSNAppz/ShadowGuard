@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"shadowguard/pkg/plugin"
+	"shadowguard/pkg/receiver"
 )
 
 // Register this plugin in the plugin package
@@ -26,6 +27,7 @@ type RequestDetails struct {
 type MonitorPlugin struct {
 	Settings   map[string]interface{}
 	ActiveMode bool
+	Receivers  []receiver.NotificationReceiver
 }
 
 func (m *MonitorPlugin) newRequestDetails(r *http.Request) RequestDetails {
@@ -62,6 +64,22 @@ func (m *MonitorPlugin) IsActiveMode() bool {
 	return m.ActiveMode
 }
 
+func (m *MonitorPlugin) Notify(message string) {
+	for _, r := range m.Receivers {
+		err := r.Notify(message)
+		if err != nil {
+			log.Printf("unable to notify receiver. message %s - error: %v", message, err)
+		}
+	}
+}
+
 func NewMonitorPlugin(settings map[string]interface{}, activeMode bool) plugin.Plugin {
-	return &MonitorPlugin{Settings: settings, ActiveMode: activeMode}
+	receivers, err := receiver.CreateReceivers(settings)
+	if err != nil {
+		panic(err)
+	}
+
+	m := &MonitorPlugin{Settings: settings, ActiveMode: activeMode, Receivers: receivers}
+
+	return m
 }

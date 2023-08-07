@@ -24,6 +24,10 @@ func main() {
 		}
 	}
 
+	r.HandleFunc("/internal", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("reached"))
+	})
+
 	log.Printf("Starting ShadowGuard v %s\n", version)
 	log.Printf("Listening on port %s\n", config.Port)
 	log.Fatal(http.ListenAndServe(config.Port, r))

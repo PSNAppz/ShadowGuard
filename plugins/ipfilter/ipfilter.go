@@ -6,11 +6,13 @@ import (
 	"net"
 	"net/http"
 	"shadowguard/pkg/plugin"
+	"shadowguard/pkg/receiver"
 )
 
 type IPFilterPlugin struct {
 	Settings   map[string]interface{}
 	ActiveMode bool
+	Receivers  []receiver.NotificationReceiver
 }
 
 func (p *IPFilterPlugin) Handle(r *http.Request) error {
@@ -58,8 +60,26 @@ func (p *IPFilterPlugin) IsActiveMode() bool {
 	return p.ActiveMode
 }
 
+func (p *IPFilterPlugin) Notify(message string) {
+	for _, r := range p.Receivers {
+		err := r.Notify(message)
+		if err != nil {
+			log.Printf("unable to notify receiver. message %s - error: %v", message, err)
+		}
+	}
+}
+
 func NewIPFilterPlugin(settings map[string]interface{}, activeMode bool) plugin.Plugin {
-	return &IPFilterPlugin{Settings: settings, ActiveMode: activeMode}
+	receivers, err := receiver.CreateReceivers(settings)
+	if err != nil {
+		panic(err)
+	}
+
+	return &IPFilterPlugin{
+		Settings:   settings,
+		ActiveMode: activeMode,
+		Receivers:  receivers,
+	}
 }
 
 func init() {
