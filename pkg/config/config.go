@@ -9,9 +9,8 @@ import (
 
 // PluginConfig represents the configuration for a single plugin
 type PluginConfig struct {
-	Type       string                 `json:"type"`
-	Settings   map[string]interface{} `json:"settings"`
-	ActiveMode bool                   `json:"active_mode,omitempty"`
+	Type     string                 `json:"type"`
+	Settings map[string]interface{} `json:"settings"`
 }
 
 // Endpoint represents an external API Endpoint and its corresponding internal endpoint

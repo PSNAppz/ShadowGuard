@@ -26,11 +26,10 @@ func RegisterPlugin(typeStr string, factory PluginFactory) {
 }
 
 // CreatePlugin creates a new Plugin of the given type with the given settings.
-func CreatePlugin(typeStr string, settings map[string]interface{}, activeMode bool) (Plugin, error) {
+func CreatePlugin(typeStr string, settings map[string]interface{}) (Plugin, error) {
 	factory, exists := pluginRegistry[typeStr]
 	if !exists {
 		return nil, fmt.Errorf("plugin type %s not found in registry", typeStr)
 	}
-	settings["active_mode"] = activeMode
 	return factory(settings), nil
 }

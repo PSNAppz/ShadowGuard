@@ -68,7 +68,7 @@ func Intercept(client *http.Client, method, url string, pluginConfigs []config.P
 func createPlugins(pluginConfigs []config.PluginConfig) ([]plugin.Plugin, error) {
 	plugins := make([]plugin.Plugin, len(pluginConfigs))
 	for i, pc := range pluginConfigs {
-		p, err := plugin.CreatePlugin(pc.Type, pc.Settings, pc.ActiveMode)
+		p, err := plugin.CreatePlugin(pc.Type, pc.Settings)
 		if err != nil {
 			return nil, err
 		}

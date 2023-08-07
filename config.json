@@ -5,22 +5,21 @@
 		"plugins": [{
 			"type": "monitor",
 			"settings": {
+				"active_mode": false,
 				"verbose": true
-			},
-			"active_mode": false
+			}
 		},
 		{
 			"type":"ratelimiter",
 			"settings":{
+				"active_mode": true,
 				"rate": 1,
 				"notify": [{
 					"type": "slack",
 					"token": "xoxb-198202255696-5682091092327-m8IHyjQEnO6FdIIslpzjq2nz",
 					"channelID": "C5UTW0J6N"
 				}]
-			},
-
-			"active_mode": true
+			}
 		}],
 		"methods": ["GET"],
 		"external": "/external",
