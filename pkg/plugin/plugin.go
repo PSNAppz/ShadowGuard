@@ -7,11 +7,10 @@ import (
 
 // Plugin is an interface that any plugin should implement.
 type Plugin interface {
-	Handle(r *http.Request) error
-	GetType() string
-	GetSettings() map[string]interface{}
+	Type() string
 	IsActiveMode() bool
 	Notify(message string)
+	Handle(r *http.Request) error
 }
 
 // PluginFactory is a function that creates a Plugin.
