@@ -33,10 +33,9 @@ func TestMonitor(t *testing.T) {
 
 	// Check if log output contains the expected strings
 	expectedStrings := []string{
-		"Incoming Request Details",
-		"Settings map[verbose:true]",
-		"Method:GET",
-		"URL:http://example.com",
+		`Incoming Request Details`,
+		`"Method": "GET"`,
+		`"URL": "http://example.com"`,
 	}
 
 	for _, s := range expectedStrings {
