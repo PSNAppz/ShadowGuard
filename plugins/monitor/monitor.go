@@ -1,6 +1,7 @@
 package monitor
 
 import (
+	"encoding/json"
 	"io"
 	"log"
 	"net/http"
@@ -48,9 +49,8 @@ func NewMonitorPlugin(settings map[string]interface{}) plugin.Plugin {
 
 func (m *MonitorPlugin) Handle(r *http.Request) error {
 	log.Println("Incoming Request Details")
-	log.Println("Settings", m.Settings)
 	requestDetails := newRequestDetails(r)
-	log.Printf("%+v\n\n", requestDetails)
+	log.Println(requestDetails)
 	return nil
 }
 
@@ -63,6 +63,15 @@ type RequestDetails struct {
 	RemoteAddr       string
 	ContentLength    int64
 	TransferEncoding []string
+}
+
+func (r RequestDetails) String() string {
+	requestDetailsBytes, err := json.MarshalIndent(r, "", " ")
+	if err != nil {
+		panic(err)
+	}
+
+	return string(requestDetailsBytes)
 }
 
 func newRequestDetails(r *http.Request) RequestDetails {
