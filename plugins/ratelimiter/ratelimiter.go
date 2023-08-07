@@ -81,7 +81,7 @@ func (r *RateLimiterPlugin) Notify(message string) {
 	for _, receiver := range r.Receivers {
 		err := receiver.Notify(message)
 		if err != nil {
-			log.Printf("Unable to notify receiver")
+			log.Printf("unable to notify receiver. message %s - error: %v", message, err)
 		}
 	}
 }

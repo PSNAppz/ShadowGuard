@@ -13,7 +13,10 @@ type NotificationReceiver interface {
 }
 
 func CreateReceivers(pluginSettings map[string]interface{}) ([]NotificationReceiver, error) {
-	receiverSettings := ParseReceiverSettings(pluginSettings)
+	receiverSettings, err := ParseReceiverSettings(pluginSettings)
+	if err != nil {
+		return nil, err
+	}
 
 	receivers := []NotificationReceiver{}
 	for _, setting := range receiverSettings {
@@ -30,7 +33,7 @@ func CreateReceivers(pluginSettings map[string]interface{}) ([]NotificationRecei
 func NewReciever(setting map[string]interface{}) (NotificationReceiver, error) {
 	notificationType, ok := setting["type"]
 	if !ok {
-		return nil, fmt.Errorf("notifcation setting must specify a type")
+		return nil, fmt.Errorf("notifcation setting must specify a type, found %v", notificationType)
 	}
 
 	var receiver NotificationReceiver
@@ -48,28 +51,27 @@ func NewReciever(setting map[string]interface{}) (NotificationReceiver, error) {
 	return receiver, err
 }
 
-func ParseReceiverSettings(settings map[string]interface{}) []map[string]interface{} {
-	if _, ok := settings["notify"]; !ok {
-		return nil
+func ParseReceiverSettings(settings map[string]interface{}) ([]map[string]interface{}, error) {
+	notificationList, ok := settings["notify"]
+	if !ok {
+		return nil, nil
 	}
 
-	notificationInterfaceList, ok := settings["notify"].([]interface{})
+	notificationInterfaceList, ok := notificationList.([]interface{})
 	if !ok {
-		panic("")
-		//panic(fmt.Errorf("notification list incorrectly configured, found %+v", notificationSettingsInterface))
+		return nil, fmt.Errorf("notification list is incorrectly configured, found %+v", notificationList)
 	}
 
 	notificationSettings := []map[string]interface{}{}
 	for _, notificationInterface := range notificationInterfaceList {
 		notificationSetting, ok := notificationInterface.(map[string]interface{})
 		if !ok {
-			panic("")
-			//panic(fmt.Errorf("notification list incorrectly configured, found %+v", notificationSettingsInterface))
+			return nil, fmt.Errorf("notification settting is incorrectly configured, found %+v", notificationSetting)
 		}
 		notificationSettings = append(notificationSettings, notificationSetting)
 	}
 
-	return notificationSettings
+	return notificationSettings, nil
 }
 
 type SlackReceiver struct {
@@ -94,7 +96,7 @@ func NewSlackReceiver(settings map[string]interface{}) (*SlackReceiver, error) {
 
 	channelIDStr, ok := channelID.(string)
 	if !ok {
-		return nil, fmt.Errorf("channel ID must be a string")
+		return nil, fmt.Errorf("channel ID must be a string, found: %+v", channelID)
 	}
 
 	token, ok := settings["token"]
@@ -104,7 +106,7 @@ func NewSlackReceiver(settings map[string]interface{}) (*SlackReceiver, error) {
 
 	tokenStr, ok := token.(string)
 	if !ok {
-		return nil, fmt.Errorf("API token must be a string")
+		return nil, fmt.Errorf("API token must be a string, found: %+v", tokenStr)
 	}
 
 	return &SlackReceiver{api: slack.New(tokenStr, slack.OptionDebug(true)), channelID: channelIDStr}, nil

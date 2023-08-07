@@ -64,7 +64,7 @@ func (p *IPFilterPlugin) Notify(message string) {
 	for _, r := range p.Receivers {
 		err := r.Notify(message)
 		if err != nil {
-			panic(err)
+			log.Printf("unable to notify receiver. message %s - error: %v", message, err)
 		}
 	}
 }

@@ -68,7 +68,7 @@ func (m *MonitorPlugin) Notify(message string) {
 	for _, r := range m.Receivers {
 		err := r.Notify(message)
 		if err != nil {
-			log.Println("unable to notify message")
+			log.Printf("unable to notify receiver. message %s - error: %v", message, err)
 		}
 	}
 }
