@@ -11,7 +11,7 @@ import (
 type PluginConfig struct {
 	Type       string                 `json:"type"`
 	Settings   map[string]interface{} `json:"settings"`
-	ActiveMode bool                   `json:"active_mode"`
+	ActiveMode bool                   `json:"active_mode,omitempty"`
 }
 
 // Endpoint represents an external API Endpoint and its corresponding internal endpoint

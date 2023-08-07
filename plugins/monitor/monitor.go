@@ -61,7 +61,7 @@ func (m *MonitorPlugin) GetSettings() map[string]interface{} {
 }
 
 func (m *MonitorPlugin) IsActiveMode() bool {
-	return m.ActiveMode
+	return true
 }
 
 func (m *MonitorPlugin) Notify(message string) {
