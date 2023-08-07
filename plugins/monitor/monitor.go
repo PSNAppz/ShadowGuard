@@ -73,13 +73,11 @@ func (m *MonitorPlugin) Notify(message string) {
 	}
 }
 
-func NewMonitorPlugin(settings map[string]interface{}, activeMode bool) plugin.Plugin {
+func NewMonitorPlugin(settings map[string]interface{}) plugin.Plugin {
 	receivers, err := receiver.CreateReceivers(settings)
 	if err != nil {
 		panic(err)
 	}
 
-	m := &MonitorPlugin{Settings: settings, ActiveMode: activeMode, Receivers: receivers}
-
-	return m
+	return &MonitorPlugin{Settings: settings, Receivers: receivers}
 }

@@ -15,7 +15,7 @@ type Plugin interface {
 }
 
 // PluginFactory is a function that creates a Plugin.
-type PluginFactory func(settings map[string]interface{}, activeMode bool) Plugin
+type PluginFactory func(settings map[string]interface{}) Plugin
 
 // pluginRegistry holds a map of plugin types to factory functions.
 var pluginRegistry = make(map[string]PluginFactory)
@@ -31,5 +31,6 @@ func CreatePlugin(typeStr string, settings map[string]interface{}, activeMode bo
 	if !exists {
 		return nil, fmt.Errorf("plugin type %s not found in registry", typeStr)
 	}
-	return factory(settings, activeMode), nil
+	settings["active_mode"] = activeMode
+	return factory(settings), nil
 }

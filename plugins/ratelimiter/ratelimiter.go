@@ -74,7 +74,7 @@ func (r *RateLimiterPlugin) GetSettings() map[string]interface{} {
 
 // IsActiveMode returns whether the plugin is in active mode.
 func (r *RateLimiterPlugin) IsActiveMode() bool {
-	return r.ActiveMode
+	return false
 }
 
 func (r *RateLimiterPlugin) Notify(message string) {
@@ -87,7 +87,7 @@ func (r *RateLimiterPlugin) Notify(message string) {
 }
 
 // Register the RateLimiter plugin in the plugin registry.
-func NewRateLimiterPlugin(pluginSettings map[string]interface{}, activeMode bool) plugin.Plugin {
+func NewRateLimiterPlugin(pluginSettings map[string]interface{}) plugin.Plugin {
 	rate := int(pluginSettings["rate"].(float64))
 
 	limiter := NewRateLimiter(rate)
@@ -98,10 +98,9 @@ func NewRateLimiterPlugin(pluginSettings map[string]interface{}, activeMode bool
 	}
 
 	limiterPlugin := &RateLimiterPlugin{
-		limiter:    limiter,
-		Settings:   pluginSettings,
-		ActiveMode: activeMode,
-		Receivers:  receivers,
+		limiter:   limiter,
+		Settings:  pluginSettings,
+		Receivers: receivers,
 	}
 
 	go limiter.Start()

@@ -69,7 +69,7 @@ func (p *IPFilterPlugin) Notify(message string) {
 	}
 }
 
-func NewIPFilterPlugin(settings map[string]interface{}, activeMode bool) plugin.Plugin {
+func NewIPFilterPlugin(settings map[string]interface{}) plugin.Plugin {
 	receivers, err := receiver.CreateReceivers(settings)
 	if err != nil {
 		panic(err)
@@ -77,7 +77,7 @@ func NewIPFilterPlugin(settings map[string]interface{}, activeMode bool) plugin.
 
 	return &IPFilterPlugin{
 		Settings:   settings,
-		ActiveMode: activeMode,
+		ActiveMode: settings["active_mode"].(bool),
 		Receivers:  receivers,
 	}
 }
