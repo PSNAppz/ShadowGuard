@@ -6,14 +6,14 @@ import (
 	"log"
 	"net/http"
 	"shadowguard/pkg/plugin"
-	"shadowguard/pkg/receiver"
+	"shadowguard/pkg/publisher"
 )
 
 var Type string = "monitor"
 
 type MonitorPlugin struct {
-	Settings  map[string]interface{}
-	receivers []receiver.NotificationReceiver
+	Settings   map[string]interface{}
+	publishers []publisher.Publisher
 }
 
 // Register this plugin in the plugin package
@@ -30,21 +30,21 @@ func (m *MonitorPlugin) IsActiveMode() bool {
 }
 
 func (m *MonitorPlugin) Notify(message string) {
-	for _, r := range m.receivers {
-		err := r.Notify(message)
+	for _, p := range m.publishers {
+		err := p.Publish(message)
 		if err != nil {
-			log.Printf("unable to notify receiver. message %s - error: %v", message, err)
+			log.Printf("unable to notify publisher. message %s - error: %v", message, err)
 		}
 	}
 }
 
 func NewMonitorPlugin(settings map[string]interface{}) plugin.Plugin {
-	receivers, err := receiver.CreateReceivers(settings)
+	publishers, err := publisher.CreatePublishers(settings)
 	if err != nil {
 		panic(err)
 	}
 
-	return &MonitorPlugin{Settings: settings, receivers: receivers}
+	return &MonitorPlugin{Settings: settings, publishers: publishers}
 }
 
 func (m *MonitorPlugin) Handle(r *http.Request) error {

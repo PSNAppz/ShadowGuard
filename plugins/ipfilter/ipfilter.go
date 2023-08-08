@@ -6,7 +6,7 @@ import (
 	"net"
 	"net/http"
 	"shadowguard/pkg/plugin"
-	"shadowguard/pkg/receiver"
+	"shadowguard/pkg/publisher"
 )
 
 var Type string = "ipfilter"
@@ -20,11 +20,11 @@ type IPFilterPlugin struct {
 	activeMode bool
 	blacklist  []interface{}
 	whitelist  []interface{}
-	receivers  []receiver.NotificationReceiver
+	publishers []publisher.Publisher
 }
 
 func NewIPFilterPlugin(settings map[string]interface{}) plugin.Plugin {
-	receivers, err := receiver.CreateReceivers(settings)
+	publishers, err := publisher.CreatePublishers(settings)
 	if err != nil {
 		panic(err)
 	}
@@ -45,7 +45,7 @@ func NewIPFilterPlugin(settings map[string]interface{}) plugin.Plugin {
 		activeMode: settings["active_mode"].(bool),
 		blacklist:  blacklist,
 		whitelist:  whitelist,
-		receivers:  receivers,
+		publishers: publishers,
 	}
 }
 
@@ -58,10 +58,10 @@ func (p *IPFilterPlugin) IsActiveMode() bool {
 }
 
 func (p *IPFilterPlugin) Notify(message string) {
-	for _, r := range p.receivers {
-		err := r.Notify(message)
+	for _, p := range p.publishers {
+		err := p.Publish(message)
 		if err != nil {
-			log.Printf("unable to notify receiver. message %s - error: %v", message, err)
+			log.Printf("unable to notify publisher. message %s - error: %v", message, err)
 		}
 	}
 }

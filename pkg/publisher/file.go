@@ -1,4 +1,4 @@
-package receiver
+package publisher
 
 import (
 	"fmt"
@@ -6,21 +6,21 @@ import (
 	"path/filepath"
 )
 
-type FileReceiver struct {
+type FilePublisher struct {
 	file *os.File
 }
 
-func (f FileReceiver) Notify(message string) error {
+func (f FilePublisher) Publish(message string) error {
 	lineBytes := []byte(fmt.Sprintf("%s\n", message))
 	_, err := f.file.Write(lineBytes)
 	return err
 }
 
-func (f FileReceiver) Type() string {
+func (f FilePublisher) Type() string {
 	return "file"
 }
 
-func NewFileReceiver(settings map[string]interface{}) (*FileReceiver, error) {
+func NewFilePublisher(settings map[string]interface{}) (*FilePublisher, error) {
 	name, ok := settings["name"]
 	if !ok {
 		return nil, fmt.Errorf("file must have a name")
@@ -52,5 +52,5 @@ func NewFileReceiver(settings map[string]interface{}) (*FileReceiver, error) {
 		return nil, err
 	}
 
-	return &FileReceiver{file: file}, nil
+	return &FilePublisher{file: file}, nil
 }

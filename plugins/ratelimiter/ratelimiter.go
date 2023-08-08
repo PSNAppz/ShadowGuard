@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 	"shadowguard/pkg/plugin"
-	"shadowguard/pkg/receiver"
+	"shadowguard/pkg/publisher"
 	"time"
 )
 
@@ -17,9 +17,9 @@ func init() {
 
 // RateLimiterPlugin implements the Plugin interface for rate limiting.
 type RateLimiterPlugin struct {
-	Settings  map[string]interface{}
-	limiter   *RateLimiter
-	receivers []receiver.NotificationReceiver
+	Settings   map[string]interface{}
+	limiter    *RateLimiter
+	publishers []publisher.Publisher
 }
 
 // GetType returns the type of the plugin.
@@ -33,10 +33,10 @@ func (r *RateLimiterPlugin) IsActiveMode() bool {
 }
 
 func (r *RateLimiterPlugin) Notify(message string) {
-	for _, receiver := range r.receivers {
-		err := receiver.Notify(message)
+	for _, publisher := range r.publishers {
+		err := publisher.Publish(message)
 		if err != nil {
-			log.Printf("unable to notify receiver. message %s - error: %v", message, err)
+			log.Printf("unable to notify publisher. message %s - error: %v", message, err)
 		}
 	}
 }
@@ -47,15 +47,15 @@ func NewRateLimiterPlugin(pluginSettings map[string]interface{}) plugin.Plugin {
 
 	limiter := NewRateLimiter(rate)
 
-	receivers, err := receiver.CreateReceivers(pluginSettings)
+	publishers, err := publisher.CreatePublishers(pluginSettings)
 	if err != nil {
 		panic(err)
 	}
 
 	limiterPlugin := &RateLimiterPlugin{
-		Settings:  pluginSettings,
-		limiter:   limiter,
-		receivers: receivers,
+		Settings:   pluginSettings,
+		limiter:    limiter,
+		publishers: publishers,
 	}
 
 	go limiter.Start()

@@ -1,4 +1,4 @@
-package receiver
+package publisher
 
 import (
 	"fmt"
@@ -6,21 +6,21 @@ import (
 	"github.com/slack-go/slack"
 )
 
-type SlackReceiver struct {
+type SlackPublisher struct {
 	api       *slack.Client
 	channelID string
 }
 
-func (s SlackReceiver) Type() string {
+func (s SlackPublisher) Type() string {
 	return "slack"
 }
 
-func (s SlackReceiver) Notify(message string) error {
+func (s SlackPublisher) Publish(message string) error {
 	_, _, err := s.api.PostMessage(s.channelID, slack.MsgOptionText(message, false))
 	return err
 }
 
-func NewSlackReceiver(settings map[string]interface{}) (*SlackReceiver, error) {
+func NewSlackPublisher(settings map[string]interface{}) (*SlackPublisher, error) {
 	channelID, ok := settings["channelID"]
 	if !ok {
 		return nil, fmt.Errorf("channel ID is required to send Slack notification")
@@ -41,5 +41,5 @@ func NewSlackReceiver(settings map[string]interface{}) (*SlackReceiver, error) {
 		return nil, fmt.Errorf("API token must be a string, found: %+v", tokenStr)
 	}
 
-	return &SlackReceiver{api: slack.New(tokenStr, slack.OptionDebug(true)), channelID: channelIDStr}, nil
+	return &SlackPublisher{api: slack.New(tokenStr, slack.OptionDebug(true)), channelID: channelIDStr}, nil
 }
