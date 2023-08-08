@@ -48,9 +48,16 @@ func NewMonitorPlugin(settings map[string]interface{}) plugin.Plugin {
 }
 
 func (m *MonitorPlugin) Handle(r *http.Request) error {
-	log.Println("Incoming Request Details")
 	requestDetails := newRequestDetails(r)
-	log.Println(requestDetails)
+
+	// handle verbose logging
+	if verboseInterface, ok := m.Settings["verbose"]; ok {
+		if verbose, ok := verboseInterface.(bool); ok && verbose {
+			log.Println("Incoming Request Details")
+			log.Println(requestDetails)
+		}
+	}
+
 	m.Notify(requestDetails.String())
 	return nil
 }
