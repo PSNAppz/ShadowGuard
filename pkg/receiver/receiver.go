@@ -2,8 +2,6 @@ package receiver
 
 import (
 	"fmt"
-
-	"github.com/slack-go/slack"
 )
 
 // NotificationReceiver is an interface that represents the receivers of the notification.
@@ -42,10 +40,8 @@ func NewReciever(setting map[string]interface{}) (NotificationReceiver, error) {
 	switch notificationType {
 	case "slack":
 		receiver, err = NewSlackReceiver(setting)
-		if err != nil {
-			return nil, err
-		}
-		return receiver, nil
+	case "file":
+		receiver, err = NewFileReceiver(setting)
 	}
 
 	return receiver, err
@@ -72,42 +68,4 @@ func ParseReceiverSettings(settings map[string]interface{}) ([]map[string]interf
 	}
 
 	return notificationSettings, nil
-}
-
-type SlackReceiver struct {
-	api       *slack.Client
-	channelID string
-}
-
-func (s SlackReceiver) Type() string {
-	return "slack"
-}
-
-func (s SlackReceiver) Notify(message string) error {
-	_, _, err := s.api.PostMessage(s.channelID, slack.MsgOptionText(message, false))
-	return err
-}
-
-func NewSlackReceiver(settings map[string]interface{}) (*SlackReceiver, error) {
-	channelID, ok := settings["channelID"]
-	if !ok {
-		return nil, fmt.Errorf("channel ID is required to send Slack notification")
-	}
-
-	channelIDStr, ok := channelID.(string)
-	if !ok {
-		return nil, fmt.Errorf("channel ID must be a string, found: %+v", channelID)
-	}
-
-	token, ok := settings["token"]
-	if !ok {
-		return nil, fmt.Errorf("API token required to send Slack notifications")
-	}
-
-	tokenStr, ok := token.(string)
-	if !ok {
-		return nil, fmt.Errorf("API token must be a string, found: %+v", tokenStr)
-	}
-
-	return &SlackReceiver{api: slack.New(tokenStr, slack.OptionDebug(true)), channelID: channelIDStr}, nil
 }

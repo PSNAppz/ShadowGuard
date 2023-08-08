@@ -6,7 +6,12 @@
 			"type": "monitor",
 			"settings": {
 				"active_mode": false,
-				"verbose": true
+				"verbose": true,
+				"notify": [{
+					"type": "file",
+					"name": "monitor-log",
+					"directory": "."
+				}]
 			}
 		},
 		{

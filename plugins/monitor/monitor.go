@@ -51,6 +51,7 @@ func (m *MonitorPlugin) Handle(r *http.Request) error {
 	log.Println("Incoming Request Details")
 	requestDetails := newRequestDetails(r)
 	log.Println(requestDetails)
+	m.Notify(requestDetails.String())
 	return nil
 }
 
