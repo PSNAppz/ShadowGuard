@@ -6,82 +6,80 @@ import (
 	"net"
 	"net/http"
 	"shadowguard/pkg/plugin"
-	"shadowguard/pkg/receiver"
+	"shadowguard/pkg/publisher"
 )
+
+var Type string = "ipfilter"
+
+func init() {
+	plugin.RegisterPlugin(Type, NewIPFilterPlugin)
+}
 
 type IPFilterPlugin struct {
 	Settings   map[string]interface{}
-	ActiveMode bool
-	Receivers  []receiver.NotificationReceiver
+	activeMode bool
+	blacklist  []interface{}
+	whitelist  []interface{}
+	publishers []publisher.Publisher
+}
+
+func NewIPFilterPlugin(settings map[string]interface{}) plugin.Plugin {
+	publishers, err := publisher.CreatePublishers(settings)
+	if err != nil {
+		panic(err)
+	}
+
+	// Get the blacklist and whitelist from the settings
+	blacklist, ok := settings["blacklist"].([]interface{})
+	if !ok {
+		panic("expected 'blacklist' to be a slice of interfaces")
+	}
+
+	whitelist, ok := settings["whitelist"].([]interface{})
+	if !ok {
+		panic("expected 'whitelist' to be a slice of interfaces")
+	}
+
+	return &IPFilterPlugin{
+		Settings:   settings,
+		activeMode: settings["active_mode"].(bool),
+		blacklist:  blacklist,
+		whitelist:  whitelist,
+		publishers: publishers,
+	}
+}
+
+func (p *IPFilterPlugin) Type() string {
+	return Type
+}
+
+func (p *IPFilterPlugin) IsActiveMode() bool {
+	return p.activeMode
+}
+
+func (p *IPFilterPlugin) Notify(message string) {
+	for _, p := range p.publishers {
+		err := p.Publish(message)
+		if err != nil {
+			log.Printf("unable to notify publisher. message %s - error: %v", message, err)
+		}
+	}
 }
 
 func (p *IPFilterPlugin) Handle(r *http.Request) error {
 	// Extract the IP from the request
-	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
-
-	// Get the blacklist and whitelist from the settings
-	blacklist, ok := p.Settings["blacklist"].([]interface{})
-	if !ok {
-		log.Println("Error: expected 'blacklist' to be a slice of interfaces")
-	}
-	whitelist, ok := p.Settings["whitelist"].([]interface{})
-	if !ok {
-		log.Println("Error: expected 'whitelist' to be a slice of interfaces")
+	ip, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		return err
 	}
 
 	// Check if the IP is on the blacklist
-	for _, blacklistedIP := range blacklist {
+	for _, blacklistedIP := range p.blacklist {
 		if ip == blacklistedIP {
 			return errors.New("IP address is blacklisted")
 		}
 	}
 
-	// Check if the IP is on the whitelist
-	for _, whitelistedIP := range whitelist {
-		if ip == whitelistedIP {
-			// If the IP is on the whitelist, do nothing and let the request continue
-			return nil
-		}
-	}
-
-	// If the IP is not on either list, allow the request to continue
+	// Return nil if the IP is on the whitelist and if it is not
 	return nil
-}
-
-func (p *IPFilterPlugin) GetType() string {
-	return "ipfilter"
-}
-
-func (p *IPFilterPlugin) GetSettings() map[string]interface{} {
-	return p.Settings
-}
-
-func (p *IPFilterPlugin) IsActiveMode() bool {
-	return p.ActiveMode
-}
-
-func (p *IPFilterPlugin) Notify(message string) {
-	for _, r := range p.Receivers {
-		err := r.Notify(message)
-		if err != nil {
-			log.Printf("unable to notify receiver. message %s - error: %v", message, err)
-		}
-	}
-}
-
-func NewIPFilterPlugin(settings map[string]interface{}, activeMode bool) plugin.Plugin {
-	receivers, err := receiver.CreateReceivers(settings)
-	if err != nil {
-		panic(err)
-	}
-
-	return &IPFilterPlugin{
-		Settings:   settings,
-		ActiveMode: activeMode,
-		Receivers:  receivers,
-	}
-}
-
-func init() {
-	plugin.RegisterPlugin("ipfilter", NewIPFilterPlugin)
 }

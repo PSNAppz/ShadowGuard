@@ -26,17 +26,16 @@ func TestMonitor(t *testing.T) {
 		"verbose": true,
 	}
 
-	m := NewMonitorPlugin(settings, false)
+	m := NewMonitorPlugin(settings)
 	m.Handle(req)
 
 	logged := buf.String()
 
 	// Check if log output contains the expected strings
 	expectedStrings := []string{
-		"Incoming Request Details",
-		"Settings map[verbose:true]",
-		"Method:GET",
-		"URL:http://example.com",
+		`Incoming Request Details`,
+		`"Method": "GET"`,
+		`"URL": "http://example.com"`,
 	}
 
 	for _, s := range expectedStrings {

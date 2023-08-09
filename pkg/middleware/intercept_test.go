@@ -25,10 +25,10 @@ func TestInterceptWithActivePlugins(t *testing.T) {
 		{
 			Type: "ipfilter",
 			Settings: map[string]interface{}{
-				"blacklist": []interface{}{"127.0.0.1"},
-				"whitelist": []interface{}{},
+				"active_mode": true,
+				"blacklist":   []interface{}{"127.0.0.1"},
+				"whitelist":   []interface{}{},
 			},
-			ActiveMode: true,
 		},
 	}
 	// create external endpoint (or client facing endpoint)
