@@ -50,6 +50,6 @@ func Init() *Config {
 
 	var config Config
 	json.Unmarshal(byteData, &config)
-	log.Printf("Configuration file loaded. %+v\n", config)
+	log.Printf("Configuration file loaded.\n")
 	return &config
 }
