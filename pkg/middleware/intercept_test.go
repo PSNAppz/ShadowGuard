@@ -23,11 +23,13 @@ func TestInterceptWithActivePlugins(t *testing.T) {
 	method := "GET"
 	pluginConfigs := []config.PluginConfig{
 		{
-			Type: "ipfilter",
+			Type: "requestfilter",
 			Settings: map[string]interface{}{
-				"active_mode": true,
-				"blacklist":   []interface{}{"127.0.0.1"},
-				"whitelist":   []interface{}{},
+				"active_mode":      true,
+				"ip-blacklist":     []interface{}{"127.0.0.1"},
+				"ip-whitelist":     []interface{}{},
+				"region-whitelist": []interface{}{},
+				"region-blacklist": []interface{}{},
 			},
 		},
 	}

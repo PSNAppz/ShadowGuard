@@ -25,6 +25,16 @@
 					"channelID": "C5UTW0J6N"
 				}]
 			}
+		},
+		{
+			"type": "requestfilter",
+			"settings":{
+				"active_mode": true,
+				"ip-blacklist":[],
+				"ip-whitelist": [],
+				"region-whitelist": ["US", "IN"],
+				"region-blacklist": []
+			}
 		}],
 		"methods": ["GET"],
 		"external": "/external",
