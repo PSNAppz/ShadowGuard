@@ -3,6 +3,7 @@ package ratelimiter
 import (
 	"log"
 	"net/http"
+	"shadowguard/pkg/database"
 	"shadowguard/pkg/plugin"
 	"shadowguard/pkg/publisher"
 	"time"
@@ -42,7 +43,7 @@ func (r *RateLimiterPlugin) Notify(message string) {
 }
 
 // Register the RateLimiter plugin in the plugin registry.
-func NewRateLimiterPlugin(pluginSettings map[string]interface{}) plugin.Plugin {
+func NewRateLimiterPlugin(pluginSettings map[string]interface{}, db *database.Database) plugin.Plugin {
 	rate := int(pluginSettings["rate"].(float64))
 
 	limiter := NewRateLimiter(rate)

@@ -34,7 +34,7 @@ func TestInterceptWithActivePlugins(t *testing.T) {
 		},
 	}
 	// create external endpoint (or client facing endpoint)
-	externalServer := httptest.NewServer(Intercept(internalClient, method, internalServer.URL, pluginConfigs))
+	externalServer := httptest.NewServer(Intercept(internalClient, method, internalServer.URL, pluginConfigs, nil))
 	defer externalServer.Close()
 
 	externalClient := externalServer.Client()
@@ -91,7 +91,7 @@ func TestInterceptWithPassivePlugins(t *testing.T) {
 		},
 	}
 	// create external endpoint (or client facing endpoint)
-	externalServer := httptest.NewServer(Intercept(internalClient, method, internalServer.URL, pluginConfigs))
+	externalServer := httptest.NewServer(Intercept(internalClient, method, internalServer.URL, pluginConfigs, nil))
 	defer externalServer.Close()
 
 	externalClient := externalServer.Client()

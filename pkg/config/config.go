@@ -21,11 +21,20 @@ type Endpoint struct {
 	Internal string         `json:"internal"`
 }
 
+type DatabaseConfig struct {
+	Host     string `json:"host"`
+	Port     string `json:"port"`
+	User     string `json:"user"`
+	Password string `json:"password"`
+	DBName   string `json:"dbname"`
+}
+
 // Config represents the general configuration of ShadowGuard
 type Config struct {
-	Host      string     `json:"host"`
-	Port      string     `json:"port"`
-	Endpoints []Endpoint `json:"endpoints"`
+	Database  DatabaseConfig `json:"database"`
+	Host      string         `json:"host"`
+	Port      string         `json:"port"`
+	Endpoints []Endpoint     `json:"endpoints"`
 }
 
 // Init initializes the configuration from a file.

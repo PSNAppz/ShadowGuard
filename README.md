@@ -25,6 +25,13 @@ The architecture also facilitates both active and passive modes of operation, al
 ## Getting Started:
 TODO: Instructions on how to setup "ShadowGuard", its dependencies, and how to get it running.
 
+### Database
+- Run files within `sql` directory.
+- Grant usage on the `public` schema to `gorm`.
+    1. Login as a postgres user `psql -U postgres`
+    2. Connect to `gorm` database, `\connect gorm`
+    3. Grant usage on the `public` schema for `gorm`, `GRANT USAGE on SCHEMA "public" to gorm;
+
 ## How to Use:
 TODO: Instructions on how to integrate "ShadowGuard" with other applications.
 

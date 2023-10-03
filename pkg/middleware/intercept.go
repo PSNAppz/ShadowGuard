@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"shadowguard/pkg/config"
+	"shadowguard/pkg/database"
 	"shadowguard/pkg/plugin"
 	_ "shadowguard/plugins" // Import the plugins package to register the plugins
 
@@ -11,9 +12,9 @@ import (
 )
 
 // Intercept performs intercept operation, contacts internal server and returns response to client
-func Intercept(client *http.Client, method, url string, pluginConfigs []config.PluginConfig) http.HandlerFunc {
+func Intercept(client *http.Client, method, url string, pluginConfigs []config.PluginConfig, db *database.Database) http.HandlerFunc {
 	// Convert PluginConfigs to Plugins
-	plugins, err := createPlugins(pluginConfigs)
+	plugins, err := createPlugins(pluginConfigs, db)
 	if err != nil {
 		panic(err)
 	}
@@ -68,10 +69,10 @@ func Intercept(client *http.Client, method, url string, pluginConfigs []config.P
 	}
 }
 
-func createPlugins(pluginConfigs []config.PluginConfig) ([]plugin.Plugin, error) {
+func createPlugins(pluginConfigs []config.PluginConfig, db *database.Database) ([]plugin.Plugin, error) {
 	plugins := make([]plugin.Plugin, len(pluginConfigs))
 	for i, pc := range pluginConfigs {
-		p, err := plugin.CreatePlugin(pc.Type, pc.Settings)
+		p, err := plugin.CreatePlugin(pc.Type, pc.Settings, db)
 		if err != nil {
 			return nil, err
 		}

@@ -1,0 +1,261 @@
+{
+ "ID": 0,
+ "CreatedAt": "0001-01-01T00:00:00Z",
+ "UpdatedAt": "0001-01-01T00:00:00Z",
+ "DeletedAt": null,
+ "Method": "GET",
+ "URL": "/their-client-api",
+ "Header": {
+  "Accept": [
+   "*/*"
+  ],
+  "Accept-Encoding": [
+   "gzip, deflate, br"
+  ],
+  "Accept-Language": [
+   "en-US,en;q=0.9"
+  ],
+  "Connection": [
+   "keep-alive"
+  ],
+  "Sec-Ch-Ua": [
+   "\"Brave\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\""
+  ],
+  "Sec-Ch-Ua-Mobile": [
+   "?0"
+  ],
+  "Sec-Ch-Ua-Platform": [
+   "\"Linux\""
+  ],
+  "Sec-Fetch-Dest": [
+   "empty"
+  ],
+  "Sec-Fetch-Mode": [
+   "cors"
+  ],
+  "Sec-Fetch-Site": [
+   "none"
+  ],
+  "Sec-Gpc": [
+   "1"
+  ],
+  "User-Agent": [
+   "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+  ]
+ },
+ "Body": {},
+ "Host": "localhost:8081",
+ "RemoteAddr": "[::1]:36722",
+ "ContentLength": 0,
+ "TransferEncoding": null
+}
+{
+ "ID": 0,
+ "CreatedAt": "0001-01-01T00:00:00Z",
+ "UpdatedAt": "0001-01-01T00:00:00Z",
+ "DeletedAt": null,
+ "Method": "GET",
+ "URL": "/their-client-api",
+ "Header": "Sec-Fetch-Dest: empty\nAccept-Encoding: gzip, deflate, br\nSec-Ch-Ua: \"Brave\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\nSec-Ch-Ua-Mobile: ?0\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\nSec-Ch-Ua-Platform: \"Linux\"\nAccept: */*\nConnection: keep-alive\nSec-Gpc: 1\nSec-Fetch-Site: none\nSec-Fetch-Mode: cors\nAccept-Language: en-US,en;q=0.9\n",
+ "Body": "",
+ "Host": "localhost:8081",
+ "RemoteAddr": "[::1]:47510",
+ "ContentLength": 0,
+ "TransferEncoding": null
+}
+{
+ "ID": 0,
+ "CreatedAt": "0001-01-01T00:00:00Z",
+ "UpdatedAt": "0001-01-01T00:00:00Z",
+ "DeletedAt": null,
+ "Method": "GET",
+ "URL": "/their-client-api",
+ "Header": "Accept-Encoding: gzip, deflate, br\nAccept-Language: en-US,en;q=0.9\nSec-Ch-Ua: \"Brave\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\nSec-Ch-Ua-Mobile: ?0\nAccept: */*\nSec-Fetch-Mode: cors\nSec-Fetch-Dest: empty\nConnection: keep-alive\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\nSec-Ch-Ua-Platform: \"Linux\"\nSec-Gpc: 1\nSec-Fetch-Site: none\n",
+ "Body": "",
+ "Host": "localhost:8081",
+ "RemoteAddr": "[::1]:37090",
+ "ContentLength": 0,
+ "TransferEncoding": null
+}
+{
+ "ID": 0,
+ "CreatedAt": "0001-01-01T00:00:00Z",
+ "UpdatedAt": "0001-01-01T00:00:00Z",
+ "DeletedAt": null,
+ "Method": "GET",
+ "URL": "/their-client-api",
+ "Header": "Connection: keep-alive\nAccept: */*\nSec-Gpc: 1\nSec-Fetch-Site: none\nAccept-Language: en-US,en;q=0.9\nSec-Ch-Ua-Mobile: ?0\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\nSec-Ch-Ua-Platform: \"Linux\"\nSec-Fetch-Mode: cors\nSec-Fetch-Dest: empty\nAccept-Encoding: gzip, deflate, br\nSec-Ch-Ua: \"Brave\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\n",
+ "Body": "",
+ "Host": "localhost:8081",
+ "RemoteAddr": "[::1]:37090",
+ "ContentLength": 0,
+ "TransferEncoding": null
+}
+{
+ "ID": 0,
+ "CreatedAt": "0001-01-01T00:00:00Z",
+ "UpdatedAt": "0001-01-01T00:00:00Z",
+ "DeletedAt": null,
+ "Method": "GET",
+ "URL": "/their-client-api",
+ "Header": "Sec-Ch-Ua-Platform: \"Linux\"\nAccept: */*\nSec-Gpc: 1\nAccept-Language: en-US,en;q=0.9\nConnection: keep-alive\nSec-Ch-Ua: \"Brave\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\nSec-Ch-Ua-Mobile: ?0\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\nSec-Fetch-Site: none\nSec-Fetch-Mode: cors\nSec-Fetch-Dest: empty\nAccept-Encoding: gzip, deflate, br\n",
+ "Body": "",
+ "Host": "localhost:8081",
+ "RemoteAddr": "[::1]:35292",
+ "ContentLength": 0,
+ "TransferEncoding": null
+}
+{
+ "ID": 0,
+ "CreatedAt": "0001-01-01T00:00:00Z",
+ "UpdatedAt": "0001-01-01T00:00:00Z",
+ "DeletedAt": null,
+ "Method": "GET",
+ "URL": "/their-client-api",
+ "Header": "Sec-Ch-Ua: \"Brave\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\nSec-Fetch-Dest: empty\nAccept-Encoding: gzip, deflate, br\nSec-Fetch-Site: none\nConnection: keep-alive\nSec-Ch-Ua-Mobile: ?0\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\nSec-Ch-Ua-Platform: \"Linux\"\nAccept: */*\nSec-Gpc: 1\nSec-Fetch-Mode: cors\nAccept-Language: en-US,en;q=0.9\n",
+ "Body": "",
+ "Host": "localhost:8081",
+ "RemoteAddr": "[::1]:35292",
+ "ContentLength": 0,
+ "TransferEncoding": null
+}
+{
+ "ID": 0,
+ "CreatedAt": "0001-01-01T00:00:00Z",
+ "UpdatedAt": "0001-01-01T00:00:00Z",
+ "DeletedAt": null,
+ "Method": "GET",
+ "URL": "/their-client-api",
+ "Header": "Accept: */*\nSec-Gpc: 1\nSec-Fetch-Mode: cors\nSec-Fetch-Dest: empty\nAccept-Encoding: gzip, deflate, br\nSec-Ch-Ua-Mobile: ?0\nSec-Ch-Ua-Platform: \"Linux\"\nSec-Ch-Ua: \"Brave\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\nSec-Fetch-Site: none\nAccept-Language: en-US,en;q=0.9\nConnection: keep-alive\n",
+ "Body": "",
+ "Host": "localhost:8081",
+ "RemoteAddr": "[::1]:49046",
+ "ContentLength": 0,
+ "TransferEncoding": null
+}
+{
+ "ID": 0,
+ "CreatedAt": "0001-01-01T00:00:00Z",
+ "UpdatedAt": "0001-01-01T00:00:00Z",
+ "DeletedAt": null,
+ "Method": "GET",
+ "URL": "/their-client-api",
+ "Header": "Accept-Language: en-US,en;q=0.9\nConnection: keep-alive\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\nAccept: */*\nSec-Fetch-Mode: cors\nAccept-Encoding: gzip, deflate, br\nSec-Ch-Ua: \"Brave\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\nSec-Ch-Ua-Mobile: ?0\nSec-Ch-Ua-Platform: \"Linux\"\nSec-Gpc: 1\nSec-Fetch-Site: none\nSec-Fetch-Dest: empty\n",
+ "Body": "",
+ "Host": "localhost:8081",
+ "RemoteAddr": "[::1]:49046",
+ "ContentLength": 0,
+ "TransferEncoding": null
+}
+{
+ "ID": 0,
+ "CreatedAt": "2023-10-03T15:36:22.909154766-04:00",
+ "UpdatedAt": "2023-10-03T15:36:22.909154766-04:00",
+ "DeletedAt": null,
+ "Method": "GET",
+ "URL": "/their-client-api",
+ "Header": "Connection: keep-alive\nSec-Ch-Ua: \"Brave\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\nSec-Ch-Ua-Platform: \"Linux\"\nAccept: */*\nSec-Fetch-Mode: cors\nAccept-Encoding: gzip, deflate, br\nSec-Ch-Ua-Mobile: ?0\nSec-Gpc: 1\nSec-Fetch-Site: none\nSec-Fetch-Dest: empty\nAccept-Language: en-US,en;q=0.9\n",
+ "Body": "",
+ "Host": "localhost:8081",
+ "RemoteAddr": "[::1]:55992",
+ "ContentLength": 0,
+ "TransferEncoding": null
+}
+{
+ "ID": 0,
+ "CreatedAt": "2023-10-03T15:36:44.93500336-04:00",
+ "UpdatedAt": "2023-10-03T15:36:44.93500336-04:00",
+ "DeletedAt": null,
+ "Method": "GET",
+ "URL": "/their-client-api",
+ "Header": "Accept-Encoding: gzip, deflate, br\nAccept-Language: en-US,en;q=0.9\nSec-Ch-Ua: \"Brave\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\nSec-Ch-Ua-Mobile: ?0\nSec-Fetch-Site: none\nSec-Fetch-Mode: cors\nSec-Fetch-Dest: empty\nConnection: keep-alive\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\nSec-Ch-Ua-Platform: \"Linux\"\nAccept: */*\nSec-Gpc: 1\n",
+ "Body": "",
+ "Host": "localhost:8081",
+ "RemoteAddr": "[::1]:55992",
+ "ContentLength": 0,
+ "TransferEncoding": null
+}
+{
+ "ID": 1,
+ "CreatedAt": "2023-10-03T16:03:17.026039091-04:00",
+ "UpdatedAt": "2023-10-03T16:03:17.026039091-04:00",
+ "DeletedAt": null,
+ "Method": "GET",
+ "URL": "/their-client-api",
+ "Header": "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\nSec-Ch-Ua-Platform: \"Linux\"\nAccept: */*\nSec-Fetch-Site: none\nConnection: keep-alive\nSec-Ch-Ua: \"Brave\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\nSec-Gpc: 1\nSec-Fetch-Mode: cors\nSec-Fetch-Dest: empty\nAccept-Encoding: gzip, deflate, br\nAccept-Language: en-US,en;q=0.9\nSec-Ch-Ua-Mobile: ?0\n",
+ "Body": "",
+ "Host": "localhost:8081",
+ "RemoteAddr": "[::1]:60890",
+ "ContentLength": 0,
+ "TransferEncoding": null
+}
+{
+ "ID": 2,
+ "CreatedAt": "2023-10-03T16:03:18.473619124-04:00",
+ "UpdatedAt": "2023-10-03T16:03:18.473619124-04:00",
+ "DeletedAt": null,
+ "Method": "GET",
+ "URL": "/their-client-api",
+ "Header": "Sec-Ch-Ua: \"Brave\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\nSec-Ch-Ua-Mobile: ?0\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\nSec-Ch-Ua-Platform: \"Linux\"\nAccept: */*\nSec-Gpc: 1\nSec-Fetch-Site: none\nConnection: keep-alive\nSec-Fetch-Mode: cors\nSec-Fetch-Dest: empty\nAccept-Encoding: gzip, deflate, br\nAccept-Language: en-US,en;q=0.9\n",
+ "Body": "",
+ "Host": "localhost:8081",
+ "RemoteAddr": "[::1]:60890",
+ "ContentLength": 0,
+ "TransferEncoding": null
+}
+{
+ "ID": 3,
+ "CreatedAt": "2023-10-03T16:04:32.962641188-04:00",
+ "UpdatedAt": "2023-10-03T16:04:32.962641188-04:00",
+ "DeletedAt": null,
+ "Method": "POST",
+ "URL": "/their-client-api",
+ "Header": "Sec-Ch-Ua-Mobile: ?0\nOrigin: chrome-extension://ihgpcfpkpmdcghlnaofdmjkoemnlijdi\nConnection: keep-alive\nAccept: */*\nSec-Fetch-Site: none\nContent-Length: 12\nSec-Ch-Ua: \"Brave\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\nSec-Fetch-Dest: empty\nAccept-Language: en-US,en;q=0.9\nSec-Fetch-Mode: cors\nAccept-Encoding: gzip, deflate, br\nSec-Ch-Ua-Platform: \"Linux\"\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\nContent-Type: text/plain;charset=UTF-8\nSec-Gpc: 1\n",
+ "Body": "asdfasdfasdf",
+ "Host": "localhost:8081",
+ "RemoteAddr": "[::1]:45560",
+ "ContentLength": 12,
+ "TransferEncoding": null
+}
+{
+ "ID": 4,
+ "CreatedAt": "2023-10-03T16:04:33.360566748-04:00",
+ "UpdatedAt": "2023-10-03T16:04:33.360566748-04:00",
+ "DeletedAt": null,
+ "Method": "POST",
+ "URL": "/their-client-api",
+ "Header": "Sec-Ch-Ua-Platform: \"Linux\"\nAccept: */*\nSec-Ch-Ua-Mobile: ?0\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\nSec-Gpc: 1\nOrigin: chrome-extension://ihgpcfpkpmdcghlnaofdmjkoemnlijdi\nSec-Fetch-Site: none\nSec-Fetch-Mode: cors\nAccept-Encoding: gzip, deflate, br\nAccept-Language: en-US,en;q=0.9\nConnection: keep-alive\nContent-Length: 12\nSec-Ch-Ua: \"Brave\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\nContent-Type: text/plain;charset=UTF-8\nSec-Fetch-Dest: empty\n",
+ "Body": "asdfasdfasdf",
+ "Host": "localhost:8081",
+ "RemoteAddr": "[::1]:45560",
+ "ContentLength": 12,
+ "TransferEncoding": null
+}
+{
+ "ID": 5,
+ "CreatedAt": "2023-10-03T16:04:34.008653059-04:00",
+ "UpdatedAt": "2023-10-03T16:04:34.008653059-04:00",
+ "DeletedAt": null,
+ "Method": "POST",
+ "URL": "/their-client-api",
+ "Header": "Accept-Encoding: gzip, deflate, br\nConnection: keep-alive\nSec-Ch-Ua: \"Brave\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\nSec-Ch-Ua-Platform: \"Linux\"\nSec-Fetch-Dest: empty\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\nSec-Gpc: 1\nAccept-Language: en-US,en;q=0.9\nSec-Ch-Ua-Mobile: ?0\nOrigin: chrome-extension://ihgpcfpkpmdcghlnaofdmjkoemnlijdi\nSec-Fetch-Mode: cors\nContent-Length: 12\nContent-Type: text/plain;charset=UTF-8\nAccept: */*\nSec-Fetch-Site: none\n",
+ "Body": "asdfasdfasdf",
+ "Host": "localhost:8081",
+ "RemoteAddr": "[::1]:45560",
+ "ContentLength": 12,
+ "TransferEncoding": null
+}
+{
+ "ID": 6,
+ "CreatedAt": "2023-10-03T16:04:34.168353879-04:00",
+ "UpdatedAt": "2023-10-03T16:04:34.168353879-04:00",
+ "DeletedAt": null,
+ "Method": "POST",
+ "URL": "/their-client-api",
+ "Header": "Content-Length: 12\nSec-Ch-Ua: \"Brave\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\nSec-Ch-Ua-Platform: \"Linux\"\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\nSec-Fetch-Site: none\nSec-Ch-Ua-Mobile: ?0\nSec-Gpc: 1\nSec-Fetch-Mode: cors\nAccept-Language: en-US,en;q=0.9\nConnection: keep-alive\nContent-Type: text/plain;charset=UTF-8\nAccept: */*\nOrigin: chrome-extension://ihgpcfpkpmdcghlnaofdmjkoemnlijdi\nSec-Fetch-Dest: empty\nAccept-Encoding: gzip, deflate, br\n",
+ "Body": "asdfasdfasdf",
+ "Host": "localhost:8081",
+ "RemoteAddr": "[::1]:45560",
+ "ContentLength": 12,
+ "TransferEncoding": null
+}
