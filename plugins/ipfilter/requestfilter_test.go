@@ -16,7 +16,7 @@ func TestRequestFilterPlugin(t *testing.T) {
 		"ip-whitelist":     []interface{}{},
 		"region-whitelist": []interface{}{},
 		"region-blacklist": []interface{}{},
-	})
+	}, nil)
 
 	req := httptest.NewRequest(http.MethodGet, "http://example.com/foo", nil)
 	req.RemoteAddr = "127.0.0.1:80"
@@ -33,7 +33,7 @@ func TestRequestFilterPlugin(t *testing.T) {
 		"ip-whitelist":     []interface{}{"127.0.0.1"},
 		"region-whitelist": []interface{}{},
 		"region-blacklist": []interface{}{},
-	})
+	}, nil)
 
 	err = plugin.Handle(req)
 	if err != nil {
@@ -47,7 +47,7 @@ func TestRequestFilterPlugin(t *testing.T) {
 		"ip-whitelist":     []interface{}{},
 		"region-whitelist": []interface{}{"US"},
 		"region-blacklist": []interface{}{},
-	})
+	}, nil)
 	// Mock the IP to return "US" for our tests
 	req.RemoteAddr = "115.240.90.163:80" // Indian IP sample
 	err = plugin.Handle(req)
@@ -62,7 +62,7 @@ func TestRequestFilterPlugin(t *testing.T) {
 		"ip-whitelist":     []interface{}{},
 		"region-whitelist": []interface{}{},
 		"region-blacklist": []interface{}{},
-	})
+	}, nil)
 
 	err = plugin.Handle(req)
 	if err != nil {

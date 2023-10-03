@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"shadowguard/pkg/database"
 	"shadowguard/pkg/plugin"
 	"shadowguard/pkg/publisher"
 
@@ -31,7 +32,7 @@ type RequestFilterPlugin struct {
 	publishers      []publisher.Publisher
 }
 
-func NewRequestFilterPlugin(settings map[string]interface{}) plugin.Plugin {
+func NewRequestFilterPlugin(settings map[string]interface{}, db *database.Database) plugin.Plugin {
 	publishers, err := publisher.CreatePublishers(settings)
 	if err != nil {
 		panic(err)
