@@ -21,6 +21,7 @@ type RateLimiterPlugin struct {
 	Settings   map[string]interface{}
 	limiter    *RateLimiter
 	publishers []publisher.Publisher
+	db         *database.Database
 }
 
 // GetType returns the type of the plugin.
@@ -57,6 +58,7 @@ func NewRateLimiterPlugin(pluginSettings map[string]interface{}, db *database.Da
 		Settings:   pluginSettings,
 		limiter:    limiter,
 		publishers: publishers,
+		db:         db,
 	}
 
 	go limiter.Start()
@@ -71,7 +73,7 @@ func (r *RateLimiterPlugin) Handle(req *http.Request) error {
 		r.Notify("request is being rate limited")
 	}
 
-	r.limiter.Wait()
+	r.limiter.Wait(r.db, req)
 	return nil
 }
 
@@ -101,6 +103,11 @@ func (rl *RateLimiter) Start() {
 }
 
 // Wait blocks until the rate limiter allows the next request.
-func (rl *RateLimiter) Wait() {
+func (rl *RateLimiter) Wait(db *database.Database, r *http.Request) {
+	requestModel, err := database.NewRequest(r, Type)
+	if err != nil {
+		log.Println("unable to database rate limited request. ")
+	}
+	db.Insert(requestModel)
 	<-rl.requestChan
 }
