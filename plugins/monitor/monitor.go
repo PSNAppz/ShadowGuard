@@ -1,24 +1,33 @@
 package monitor
 
 import (
-	"encoding/json"
-	"io"
 	"log"
 	"net/http"
+	"shadowguard/pkg/database"
 	"shadowguard/pkg/plugin"
 	"shadowguard/pkg/publisher"
 )
 
 var Type string = "monitor"
 
-type MonitorPlugin struct {
-	Settings   map[string]interface{}
-	publishers []publisher.Publisher
+func init() {
+	plugin.RegisterPlugin(Type, New)
 }
 
-// Register this plugin in the plugin package
-func init() {
-	plugin.RegisterPlugin(Type, NewMonitorPlugin)
+// New generates a new monitor plugin object
+func New(settings map[string]interface{}, db database.DB) plugin.Plugin {
+	publishers, err := publisher.CreatePublishers(settings)
+	if err != nil {
+		panic(err)
+	}
+	return &MonitorPlugin{Settings: settings, publishers: publishers, db: db}
+}
+
+// MonitorPlugin records incoming request and notifies various publishers that have been configured.
+type MonitorPlugin struct {
+	db         database.DB
+	Settings   map[string]interface{}
+	publishers []publisher.Publisher
 }
 
 func (m *MonitorPlugin) Type() string {
@@ -29,6 +38,7 @@ func (m *MonitorPlugin) IsActiveMode() bool {
 	return true
 }
 
+// Notify publishes the incoming request message as a string to all interested receivers.
 func (m *MonitorPlugin) Notify(message string) {
 	for _, p := range m.publishers {
 		err := p.Publish(message)
@@ -38,60 +48,21 @@ func (m *MonitorPlugin) Notify(message string) {
 	}
 }
 
-func NewMonitorPlugin(settings map[string]interface{}) plugin.Plugin {
-	publishers, err := publisher.CreatePublishers(settings)
-	if err != nil {
-		panic(err)
-	}
-
-	return &MonitorPlugin{Settings: settings, publishers: publishers}
-}
-
+// Handle formats the incoming request, optionally logs it, inserts into the database and notifies publishers.
 func (m *MonitorPlugin) Handle(r *http.Request) error {
-	requestDetails := newRequestDetails(r)
-
+	requestModel, err := database.NewRequest(r, Type)
+	if err != nil {
+		return err
+	}
 	// handle verbose logging
 	if verboseInterface, ok := m.Settings["verbose"]; ok {
 		if verbose, ok := verboseInterface.(bool); ok && verbose {
 			log.Println("Incoming Request Details")
-			log.Println(requestDetails)
+			log.Println(requestModel)
 		}
 	}
 
-	m.Notify(requestDetails.String())
+	m.db.Insert(requestModel)
+	m.Notify(requestModel.String())
 	return nil
-}
-
-type RequestDetails struct {
-	Method           string
-	URL              string
-	Header           http.Header
-	Body             io.ReadCloser
-	Host             string
-	RemoteAddr       string
-	ContentLength    int64
-	TransferEncoding []string
-}
-
-func (r RequestDetails) String() string {
-	requestDetailsBytes, err := json.MarshalIndent(r, "", " ")
-	if err != nil {
-		panic(err)
-	}
-
-	return string(requestDetailsBytes)
-}
-
-func newRequestDetails(r *http.Request) RequestDetails {
-	requestDetails := RequestDetails{
-		Method:           r.Method,
-		URL:              r.URL.String(),
-		Header:           r.Header,
-		Body:             r.Body,
-		Host:             r.Host,
-		RemoteAddr:       r.RemoteAddr,
-		ContentLength:    r.ContentLength,
-		TransferEncoding: r.TransferEncoding,
-	}
-	return requestDetails
 }

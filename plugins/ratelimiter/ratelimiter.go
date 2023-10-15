@@ -3,6 +3,7 @@ package ratelimiter
 import (
 	"log"
 	"net/http"
+	"shadowguard/pkg/database"
 	"shadowguard/pkg/plugin"
 	"shadowguard/pkg/publisher"
 	"time"
@@ -20,6 +21,7 @@ type RateLimiterPlugin struct {
 	Settings   map[string]interface{}
 	limiter    *RateLimiter
 	publishers []publisher.Publisher
+	db         database.DB
 }
 
 // GetType returns the type of the plugin.
@@ -42,7 +44,7 @@ func (r *RateLimiterPlugin) Notify(message string) {
 }
 
 // Register the RateLimiter plugin in the plugin registry.
-func NewRateLimiterPlugin(pluginSettings map[string]interface{}) plugin.Plugin {
+func NewRateLimiterPlugin(pluginSettings map[string]interface{}, db database.DB) plugin.Plugin {
 	rate := int(pluginSettings["rate"].(float64))
 
 	limiter := NewRateLimiter(rate)
@@ -56,6 +58,7 @@ func NewRateLimiterPlugin(pluginSettings map[string]interface{}) plugin.Plugin {
 		Settings:   pluginSettings,
 		limiter:    limiter,
 		publishers: publishers,
+		db:         db,
 	}
 
 	go limiter.Start()
@@ -70,7 +73,7 @@ func (r *RateLimiterPlugin) Handle(req *http.Request) error {
 		r.Notify("request is being rate limited")
 	}
 
-	r.limiter.Wait()
+	r.limiter.Wait(r.db, req)
 	return nil
 }
 
@@ -100,6 +103,11 @@ func (rl *RateLimiter) Start() {
 }
 
 // Wait blocks until the rate limiter allows the next request.
-func (rl *RateLimiter) Wait() {
+func (rl *RateLimiter) Wait(db database.DB, r *http.Request) {
+	requestModel, err := database.NewRequest(r, Type)
+	if err != nil {
+		log.Println("unable to database rate limited request. ")
+	}
+	db.Insert(requestModel)
 	<-rl.requestChan
 }

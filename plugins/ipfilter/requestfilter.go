@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"shadowguard/pkg/database"
 	"shadowguard/pkg/plugin"
 	"shadowguard/pkg/publisher"
 
@@ -22,6 +23,7 @@ func init() {
 }
 
 type RequestFilterPlugin struct {
+	db              database.DB
 	Settings        map[string]interface{}
 	activeMode      bool
 	ipBlacklist     []interface{}
@@ -31,7 +33,7 @@ type RequestFilterPlugin struct {
 	publishers      []publisher.Publisher
 }
 
-func NewRequestFilterPlugin(settings map[string]interface{}) plugin.Plugin {
+func NewRequestFilterPlugin(settings map[string]interface{}, db database.DB) plugin.Plugin {
 	publishers, err := publisher.CreatePublishers(settings)
 	if err != nil {
 		panic(err)
@@ -43,6 +45,7 @@ func NewRequestFilterPlugin(settings map[string]interface{}) plugin.Plugin {
 	regionBlacklist, _ := settings["region-blacklist"].([]interface{})
 
 	return &RequestFilterPlugin{
+		db:              db,
 		Settings:        settings,
 		activeMode:      settings["active_mode"].(bool),
 		ipBlacklist:     ipBlacklist,
@@ -80,6 +83,11 @@ func (p *RequestFilterPlugin) Handle(r *http.Request) error {
 	if len(p.ipBlacklist) > 0 {
 		for _, blacklistedIP := range p.ipBlacklist {
 			if ip == blacklistedIP {
+				req, err := database.NewRequest(r, "ipblacklist")
+				if err != nil {
+					return err
+				}
+				p.db.Insert(req)
 				return errors.New("IP address is blacklisted")
 			}
 		}
@@ -89,6 +97,11 @@ func (p *RequestFilterPlugin) Handle(r *http.Request) error {
 		isWhitelisted := false
 		for _, whitelistedIP := range p.ipWhitelist {
 			if ip == whitelistedIP {
+				req, err := database.NewRequest(r, "ipwhitelist")
+				if err != nil {
+					return err
+				}
+				p.db.Insert(req)
 				isWhitelisted = true
 				break
 			}
@@ -104,6 +117,11 @@ func (p *RequestFilterPlugin) Handle(r *http.Request) error {
 
 		for _, restrictedRegion := range p.regionBlacklist {
 			if region == restrictedRegion {
+				req, err := database.NewRequest(r, "regionblacklist")
+				if err != nil {
+					return err
+				}
+				p.db.Insert(req)
 				log.Printf("region %s is restricted by policy", region)
 				return errors.New("access from this region is restricted by policy")
 			}
@@ -114,6 +132,11 @@ func (p *RequestFilterPlugin) Handle(r *http.Request) error {
 		isRegionWhitelisted := false
 		for _, allowedRegion := range p.regionWhitelist {
 			if region == allowedRegion {
+				req, err := database.NewRequest(r, "regionwhitelist")
+				if err != nil {
+					return err
+				}
+				p.db.Insert(req)
 				isRegionWhitelisted = true
 				break
 			}

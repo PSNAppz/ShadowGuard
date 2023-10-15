@@ -1,4 +1,11 @@
 {
+	"database": {
+		"host": "localhost",
+		"port": "5432",
+		"user": "gorm",
+		"password": "gorm",
+		"dbname": "gorm"
+	},
 	"host": "http://localhost",
 	"port": ":8081",
 	"endpoints": [{
@@ -36,8 +43,8 @@
 				"region-blacklist": []
 			}
 		}],
-		"methods": ["GET"],
-		"external": "/external",
-		"internal": "/internal"
+		"methods": ["GET", "POST"],
+		"external": "/their-client-api",
+		"internal": "/our-customers-api"
 	}]
 }

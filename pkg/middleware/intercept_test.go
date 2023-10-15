@@ -1,10 +1,12 @@
 package middleware
 
 import (
+	"bytes"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"shadowguard/pkg/config"
+	"shadowguard/pkg/database"
 	"strings"
 	"testing"
 )
@@ -34,14 +36,15 @@ func TestInterceptWithActivePlugins(t *testing.T) {
 		},
 	}
 	// create external endpoint (or client facing endpoint)
-	externalServer := httptest.NewServer(Intercept(internalClient, method, internalServer.URL, pluginConfigs))
+	externalServer := httptest.NewServer(Intercept(internalClient, method, internalServer.URL, pluginConfigs, database.NewMock()))
 	defer externalServer.Close()
 
 	externalClient := externalServer.Client()
 	defer externalServer.CloseClientConnections()
 
 	// Initiate request to external client
-	req := httptest.NewRequest(http.MethodGet, externalServer.URL, nil)
+	buf := bytes.NewBufferString("this is test data")
+	req := httptest.NewRequest(http.MethodGet, externalServer.URL, buf)
 	req.RemoteAddr = "127.0.0.1:80" // httptest creates 127.0.0.1:random_port
 	req.RequestURI = ""
 	req.Header["Connection"] = []string{"Keep-Alive"}
@@ -91,14 +94,15 @@ func TestInterceptWithPassivePlugins(t *testing.T) {
 		},
 	}
 	// create external endpoint (or client facing endpoint)
-	externalServer := httptest.NewServer(Intercept(internalClient, method, internalServer.URL, pluginConfigs))
+	externalServer := httptest.NewServer(Intercept(internalClient, method, internalServer.URL, pluginConfigs, database.NewMock()))
 	defer externalServer.Close()
 
 	externalClient := externalServer.Client()
 	defer externalServer.CloseClientConnections()
 
+	buf := bytes.NewBufferString("this is test data")
 	// Initiate request to external client
-	req := httptest.NewRequest(http.MethodGet, externalServer.URL, nil)
+	req := httptest.NewRequest(http.MethodGet, externalServer.URL, buf)
 	req.RequestURI = ""
 	req.Header["Connection"] = []string{"Keep-Alive"}
 	resp, err := externalClient.Do(req)
