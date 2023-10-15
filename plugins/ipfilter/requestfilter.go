@@ -23,7 +23,7 @@ func init() {
 }
 
 type RequestFilterPlugin struct {
-	db              *database.Database
+	db              database.DB
 	Settings        map[string]interface{}
 	activeMode      bool
 	ipBlacklist     []interface{}
@@ -33,7 +33,7 @@ type RequestFilterPlugin struct {
 	publishers      []publisher.Publisher
 }
 
-func NewRequestFilterPlugin(settings map[string]interface{}, db *database.Database) plugin.Plugin {
+func NewRequestFilterPlugin(settings map[string]interface{}, db database.DB) plugin.Plugin {
 	publishers, err := publisher.CreatePublishers(settings)
 	if err != nil {
 		panic(err)

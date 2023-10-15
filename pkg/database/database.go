@@ -4,9 +4,30 @@ import (
 	"fmt"
 	"shadowguard/pkg/config"
 
+	"github.com/google/uuid"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
+
+type DB interface {
+	Insert(v interface{}) (int64, error)
+}
+
+type MockDatabase struct {
+	elements map[string]interface{}
+}
+
+func (m *MockDatabase) Insert(v interface{}) (int64, error) {
+	id := uuid.NewString()
+	m.elements[id] = v
+	return 0, nil
+}
+
+func NewMock() *MockDatabase {
+	return &MockDatabase{
+		elements: map[string]interface{}{},
+	}
+}
 
 type Database struct {
 	conn *gorm.DB

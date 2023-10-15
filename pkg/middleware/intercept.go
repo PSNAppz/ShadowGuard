@@ -12,7 +12,7 @@ import (
 )
 
 // Intercept performs intercept operation, contacts internal server and returns response to client
-func Intercept(client *http.Client, method, url string, pluginConfigs []config.PluginConfig, db *database.Database) http.HandlerFunc {
+func Intercept(client *http.Client, method, url string, pluginConfigs []config.PluginConfig, db database.DB) http.HandlerFunc {
 	// Convert PluginConfigs to Plugins
 	plugins, err := createPlugins(pluginConfigs, db)
 	if err != nil {
@@ -69,7 +69,7 @@ func Intercept(client *http.Client, method, url string, pluginConfigs []config.P
 	}
 }
 
-func createPlugins(pluginConfigs []config.PluginConfig, db *database.Database) ([]plugin.Plugin, error) {
+func createPlugins(pluginConfigs []config.PluginConfig, db database.DB) ([]plugin.Plugin, error) {
 	plugins := make([]plugin.Plugin, len(pluginConfigs))
 	for i, pc := range pluginConfigs {
 		p, err := plugin.CreatePlugin(pc.Type, pc.Settings, db)

@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"shadowguard/pkg/database"
 	"strings"
 	"testing"
 )
@@ -17,7 +18,9 @@ func TestMonitor(t *testing.T) {
 		log.SetOutput(io.Discard)
 	}()
 
-	req, err := http.NewRequest("GET", "http://example.com", nil)
+	var httpBuf bytes.Buffer
+	httpBuf.WriteString("this is test data")
+	req, err := http.NewRequest("GET", "http://example.com", &httpBuf)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -26,7 +29,8 @@ func TestMonitor(t *testing.T) {
 		"verbose": true,
 	}
 
-	m := New(settings, nil)
+	mockDB := database.NewMock()
+	m := New(settings, mockDB)
 	m.Handle(req)
 
 	logged := buf.String()

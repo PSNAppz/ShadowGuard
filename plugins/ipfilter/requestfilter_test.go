@@ -1,8 +1,10 @@
 package requestfilter
 
 import (
+	"bytes"
 	"net/http"
 	"net/http/httptest"
+	"shadowguard/pkg/database"
 	"testing"
 )
 
@@ -16,9 +18,10 @@ func TestRequestFilterPlugin(t *testing.T) {
 		"ip-whitelist":     []interface{}{},
 		"region-whitelist": []interface{}{},
 		"region-blacklist": []interface{}{},
-	}, nil)
+	}, database.NewMock())
 
-	req := httptest.NewRequest(http.MethodGet, "http://example.com/foo", nil)
+	buf := bytes.NewBufferString("this is data")
+	req := httptest.NewRequest(http.MethodGet, "http://example.com/foo", buf)
 	req.RemoteAddr = "127.0.0.1:80"
 
 	err := plugin.Handle(req)
@@ -33,7 +36,7 @@ func TestRequestFilterPlugin(t *testing.T) {
 		"ip-whitelist":     []interface{}{"127.0.0.1"},
 		"region-whitelist": []interface{}{},
 		"region-blacklist": []interface{}{},
-	}, nil)
+	}, database.NewMock())
 
 	err = plugin.Handle(req)
 	if err != nil {
@@ -47,7 +50,7 @@ func TestRequestFilterPlugin(t *testing.T) {
 		"ip-whitelist":     []interface{}{},
 		"region-whitelist": []interface{}{"US"},
 		"region-blacklist": []interface{}{},
-	}, nil)
+	}, database.NewMock())
 	// Mock the IP to return "US" for our tests
 	req.RemoteAddr = "115.240.90.163:80" // Indian IP sample
 	err = plugin.Handle(req)
@@ -62,7 +65,7 @@ func TestRequestFilterPlugin(t *testing.T) {
 		"ip-whitelist":     []interface{}{},
 		"region-whitelist": []interface{}{},
 		"region-blacklist": []interface{}{},
-	}, nil)
+	}, database.NewMock())
 
 	err = plugin.Handle(req)
 	if err != nil {

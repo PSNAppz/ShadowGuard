@@ -15,7 +15,7 @@ func init() {
 }
 
 // New generates a new monitor plugin object
-func New(settings map[string]interface{}, db *database.Database) plugin.Plugin {
+func New(settings map[string]interface{}, db database.DB) plugin.Plugin {
 	publishers, err := publisher.CreatePublishers(settings)
 	if err != nil {
 		panic(err)
@@ -25,7 +25,7 @@ func New(settings map[string]interface{}, db *database.Database) plugin.Plugin {
 
 // MonitorPlugin records incoming request and notifies various publishers that have been configured.
 type MonitorPlugin struct {
-	db         *database.Database
+	db         database.DB
 	Settings   map[string]interface{}
 	publishers []publisher.Publisher
 }
