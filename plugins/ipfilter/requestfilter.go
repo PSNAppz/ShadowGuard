@@ -113,8 +113,11 @@ func (p *RequestFilterPlugin) Handle(r *http.Request) error {
 
 	// Handle region-based restrictions
 	region := getRegionForIP(ip)
-	if len(p.regionBlacklist) > 0 {
+	if region == "" {
+		return nil
+	}
 
+	if len(p.regionBlacklist) > 0 {
 		for _, restrictedRegion := range p.regionBlacklist {
 			if region == restrictedRegion {
 				req, err := database.NewRequest(r, "regionblacklist")

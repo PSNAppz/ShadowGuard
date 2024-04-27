@@ -1,50 +1,64 @@
 {
 	"database": {
 		"host": "localhost",
-		"port": "5432",
+		"port": "5433",
 		"user": "gorm",
 		"password": "gorm",
 		"dbname": "gorm"
 	},
 	"host": "http://localhost",
 	"port": ":8081",
-	"endpoints": [{
-		"plugins": [{
-			"type": "monitor",
-			"settings": {
-				"active_mode": false,
-				"verbose": true,
-				"publishers": [{
-					"type": "file",
-					"name": "monitor-log",
-					"directory": "."
-				}]
-			}
-		},
+	"endpoints": [
 		{
-			"type":"ratelimiter",
-			"settings":{
-				"active_mode": true,
-				"rate": 1,
-				"publishers": [{
-					"type": "slack",
-					"token": "xoxb-198202255696-5682091092327-m8IHyjQEnO6FdIIslpzjq2nz",
-					"channelID": "C5UTW0J6N"
-				}]
-			}
-		},
-		{
-			"type": "requestfilter",
-			"settings":{
-				"active_mode": true,
-				"ip-blacklist":[],
-				"ip-whitelist": [],
-				"region-whitelist": ["US", "IN"],
-				"region-blacklist": []
-			}
-		}],
-		"methods": ["GET", "POST"],
-		"external": "/their-client-api",
-		"internal": "/our-customers-api"
-	}]
+			"plugins": [
+				{
+					"type": "monitor",
+					"settings": {
+						"active_mode": false,
+						"verbose": true,
+						"publishers": [
+							{
+								"type": "file",
+								"name": "monitor-log",
+								"directory": "."
+							}
+						]
+					}
+				},
+				{
+					"type": "ratelimiter",
+					"settings": {
+						"active_mode": true,
+						"rate": 1,
+						"publishers": [
+							{
+								"type": "slack",
+								"token": "xoxb-198202255696-5682091092327-m8IHyjQEnO6FdIIslpzjq2nz",
+								"channelID": "C5UTW0J6N"
+							}
+						]
+					}
+				},
+				{
+					"type": "requestfilter",
+					"settings": {
+						"active_mode": true,
+						"ip-blacklist": [],
+						"ip-whitelist": [],
+						"region-whitelist": [
+							"US",
+							"IN"
+						],
+						"region-blacklist": []
+					}
+				}
+			],
+			"methods": [
+				"GET",
+				"POST"
+			],
+			"external": "/their-client-api",
+			"internal": "/our-customers-api"
+		}
+	]
 }
