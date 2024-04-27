@@ -26,6 +26,8 @@ The architecture also facilitates both active and passive modes of operation, al
 TODO: Instructions on how to setup "ShadowGuard", its dependencies, and how to get it running.
 
 ### Database
+The `build.sh` script can be used to setup the database, it'll perform the following: 
+
 - Run files within `sql` directory.
 - Grant usage on the `public` schema to `gorm`.
     1. Login as a postgres user `psql -U postgres`
