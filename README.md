@@ -35,7 +35,24 @@ The `build.sh` script can be used to setup the database, it'll perform the follo
     3. Grant usage on the `public` schema for `gorm`, `GRANT USAGE on SCHEMA "public" to gorm;`
 
 ## How to Use:
-TODO: Instructions on how to integrate "ShadowGuard" with other applications.
+The program can be ran in a multitde of ways.
+
+### Go
+```shell
+go run cmd/main.go
+```
+
+### Shell
+```shell
+chmod +x run.sh
+./run.sh
+```
+
+### Docker
+```shell
+docker build . -t shadow_guard 
+docker run --network=host shadow_guard
+```
 
 ## Documentation:
 TODO: Link to full API documentation, or brief outline of main methods and how to use them.
