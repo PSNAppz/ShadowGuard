@@ -4,3 +4,4 @@ CREATE USER gorm WITH PASSWORD 'gorm';
 -- Create the "gorm" database and grant privileges to the "gorm" user
 CREATE DATABASE gorm;
 GRANT ALL PRIVILEGES ON DATABASE gorm TO gorm;
+GRANT USAGE on SCHEMA "public" to gorm;
