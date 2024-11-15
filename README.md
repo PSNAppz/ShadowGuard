@@ -58,6 +58,10 @@ docker build . -t shadow_guard
 docker run --network=host shadow_guard
 ```
 
+## Unit Tests:
+
+In order to run unit tests, you can use the shell script `run_tests.sh` in the root directory. The unit tests can be ran using convential Go commands.
+
 ## Documentation:
 TODO: Link to full API documentation, or brief outline of main methods and how to use them.
 
