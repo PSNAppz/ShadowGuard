@@ -26,17 +26,17 @@ The architecture also facilitates both active and passive modes of operation, al
 TODO: Instructions on how to setup "ShadowGuard", its dependencies, and how to get it running.
 
 ### Database
-1. Need to install Postgres
-2. sudo -u postgres createuser --superuser $USER
-3. sudo -u postgres createdb $USER
+Run `build.sh` to setup install the necessary dependencies including Postgresql and configures the gorm database.
 
-The `build.sh` script can be used to setup the database, it'll perform the following: 
+This script does a couple of things in this sequence.
+1. Installs all of the necessary dependencies.
+2. Starts the Postgres service.
+3. Runs the necessary SQL commands to create the user and database needed for gorm.
+4. Configures Postgres to allow md5 connections.
 
-- Run files within `sql` directory.
-- Grant usage on the `public` schema to `gorm`.
-    1. Login as a postgres user `psql -U postgres`
-    2. Connect to `gorm` database, `\connect gorm`
-    3. Grant usage on the `public` schema for `gorm`, ``GRANT USAGE on SCHEMA "public" to gorm;`
+```shell
+sudo bash build.sh
+```
 
 ## How to Use:
 The program can be ran in a multitde of ways.

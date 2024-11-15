@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Variables
-DB_USER="gorm"      # replace with the desired PostgreSQL username
-DB_PASSWORD="gorm"  # replace with the desired password
-DB_NAME="gorm"  # replace with the desired database name
+DB_USER="gorm"      
+DB_PASSWORD="gorm"  
+DB_NAME="gorm" 
 
 # Check if PostgreSQL is installed; if not, install it
 if ! command -v psql &> /dev/null; then
