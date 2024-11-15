@@ -26,14 +26,41 @@ The architecture also facilitates both active and passive modes of operation, al
 TODO: Instructions on how to setup "ShadowGuard", its dependencies, and how to get it running.
 
 ### Database
-- Run files within `sql` directory.
-- Grant usage on the `public` schema to `gorm`.
-    1. Login as a postgres user `psql -U postgres`
-    2. Connect to `gorm` database, `\connect gorm`
-    3. Grant usage on the `public` schema for `gorm`, `GRANT USAGE on SCHEMA "public" to gorm;`
+Run `build.sh` to setup install the necessary dependencies including Postgresql and configures the gorm database.
+
+This script does a couple of things in this sequence.
+1. Installs all of the necessary dependencies.
+2. Starts the Postgres service.
+3. Runs the necessary SQL commands to create the user and database needed for gorm.
+4. Configures Postgres to allow md5 connections.
+
+```shell
+sudo bash build.sh
+```
 
 ## How to Use:
-TODO: Instructions on how to integrate "ShadowGuard" with other applications.
+The program can be ran in a multitde of ways.
+
+### Go
+```shell
+go run cmd/main.go
+```
+
+### Shell
+```shell
+chmod +x run.sh
+./run.sh
+```
+
+### Docker
+```shell
+docker build . -t shadow_guard 
+docker run --network=host shadow_guard
+```
+
+## Unit Tests:
+
+In order to run unit tests, you can use the shell script `run_tests.sh` in the root directory. The unit tests can be ran using convential Go commands.
 
 ## Documentation:
 TODO: Link to full API documentation, or brief outline of main methods and how to use them.
