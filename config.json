@@ -2,8 +2,8 @@
 	"database": {
 		"host": "localhost",
 		"port": "5432",
-		"user": "postgres",
-		"password": "postgres",
+		"user": "gorm",
+		"password": "gorm",
 		"dbname": "shadowguard"
 	},
 	"host": "http://localhost",

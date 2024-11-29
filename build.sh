@@ -3,7 +3,7 @@
 # Variables
 DB_USER="gorm"      
 DB_PASSWORD="gorm"  
-DB_NAME="gorm" 
+DB_NAME="shadowguard" 
 
 # Check if PostgreSQL is installed; if not, install it
 if ! command -v psql &> /dev/null; then
