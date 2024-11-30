@@ -4,7 +4,7 @@
 		"port": "5432",
 		"user": "gorm",
 		"password": "gorm",
-		"dbname": "gorm"
+		"dbname": "shadowguard"
 	},
 	"host": "http://localhost",
 	"port": ":8081",
@@ -49,7 +49,9 @@
 							"US",
 							"IN"
 						],
-						"region-blacklist": []
+						"region-blacklist": [],
+						"port-blacklist": [],
+						"port-whitelist": []
 					}
 				}
 			],
