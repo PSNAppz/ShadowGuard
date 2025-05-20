@@ -22,8 +22,22 @@ The behavior of each plugin is driven by configuration, making "ShadowGuard" hig
 
 The architecture also facilitates both active and passive modes of operation, allowing the system to either block malicious traffic actively or to monitor and alert on potential threats passively. This flexibility of operation modes allows "ShadowGuard" to be tailored to the specific security posture of your application or API.
 
+## Configuration
+By default the application loads `config.json` in the working directory. Set the `SHADOW_CONFIG` environment variable to point to a different file if desired. The configuration file is watched for changes using `fsnotify`; saving the file will automatically reload the settings without restarting the server.
+
+Example:
+
+```shell
+SHADOW_CONFIG=/etc/shadowguard.json ./run.sh
+# edit /etc/shadowguard.json while the server is running
+```
+
+The `config.json` file contains a placeholder Slack token. Provide a real token at runtime via environment variables or your secret manager.
+
+Future releases may support configuration via environment variables, command line flags, YAML files or a library such as Viper.
+
 ## Getting Started:
-TODO: Instructions on how to setup "ShadowGuard", its dependencies, and how to get it running.
+To run "ShadowGuard" locally clone the repository and execute `build.sh` to install Postgres and other dependencies. After the setup you can start the application using the Go command, `run.sh`, or Docker as shown below.
 
 ### Database
 Run `build.sh` to setup install the necessary dependencies including Postgresql and configures the gorm database.
@@ -63,7 +77,9 @@ docker run --network=host shadow_guard
 In order to run unit tests, you can use the shell script `run_tests.sh` in the root directory. The unit tests can be ran using convential Go commands.
 
 ## Documentation:
-TODO: Link to full API documentation, or brief outline of main methods and how to use them.
+The repository is organized into Go packages under `pkg/` with plugins residing in the `plugins/` directory. Each plugin exposes a `Handle` method that intercepts requests. Further documentation will be provided in future releases.
 
 ## License:
-TODO: Information on the licensing of "ShadowGuard".
+This project currently does not specify a license.
+
+

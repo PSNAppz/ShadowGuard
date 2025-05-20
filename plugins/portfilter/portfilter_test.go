@@ -72,3 +72,28 @@ func TestPortFilterPlugin(t *testing.T) {
 		t.Errorf("PortFilterPlugin did not block non-whitelisted port. Error: %v", err)
 	}
 }
+
+func TestPortFilterPluginFloatPorts(t *testing.T) {
+	settings := map[string]interface{}{
+		"port-blacklist": []interface{}{22.0},
+		"port-whitelist": []interface{}{80.0},
+		"active_mode":    true,
+	}
+	plugin := NewPortFilterPlugin(settings, database.NewMock()).(*PortFilterPlugin)
+
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	req.Host = "localhost:22"
+
+	err := plugin.Handle(req)
+	if err == nil || err.Error() != "port is blacklisted" {
+		t.Errorf("PortFilterPlugin did not handle float64 blacklist. Error: %v", err)
+	}
+
+	req = httptest.NewRequest(http.MethodGet, "/", nil)
+	req.Host = "localhost:80"
+
+	err = plugin.Handle(req)
+	if err != nil {
+		t.Errorf("PortFilterPlugin blocked whitelisted float64 port. Error: %v", err)
+	}
+}

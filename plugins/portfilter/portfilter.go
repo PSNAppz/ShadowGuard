@@ -78,7 +78,16 @@ func (p *PortFilterPlugin) Handle(r *http.Request) error {
 
 	// Check port against blacklist
 	for _, blacklistedPort := range p.portBlacklist {
-		if int(blacklistedPort.(int)) == port {
+		bp := 0
+		switch v := blacklistedPort.(type) {
+		case float64:
+			bp = int(v)
+		case int:
+			bp = v
+		default:
+			continue
+		}
+		if bp == port {
 			req, err := database.NewRequest(r, "portblacklist")
 			if err != nil {
 				print("ERROR")
@@ -95,7 +104,16 @@ func (p *PortFilterPlugin) Handle(r *http.Request) error {
 	if len(p.portWhitelist) > 0 {
 		isWhitelisted := false
 		for _, whitelistedPort := range p.portWhitelist {
-			if int(whitelistedPort.(int)) == port {
+			wp := 0
+			switch v := whitelistedPort.(type) {
+			case float64:
+				wp = int(v)
+			case int:
+				wp = v
+			default:
+				continue
+			}
+			if wp == port {
 				req, err := database.NewRequest(r, "portwhitelist")
 
 				if err != nil {

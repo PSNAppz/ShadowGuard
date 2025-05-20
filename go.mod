@@ -7,8 +7,9 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/lib/pq v1.10.9
 	github.com/oschwald/geoip2-golang v1.9.0
-	github.com/slack-go/slack v0.12.2
-	gorm.io/driver/postgres v1.5.2
+        github.com/slack-go/slack v0.12.2
+        github.com/fsnotify/fsnotify v1.6.0
+        gorm.io/driver/postgres v1.5.2
 	gorm.io/gorm v1.25.4
 )
 
