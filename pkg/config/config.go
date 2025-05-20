@@ -5,6 +5,10 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
+	"sync"
+
+	"github.com/fsnotify/fsnotify"
 )
 
 // PluginConfig represents the configuration for a single plugin
@@ -37,6 +41,69 @@ type Config struct {
 	Endpoints []Endpoint     `json:"endpoints"`
 }
 
+var (
+	current *Config
+	mu      sync.RWMutex
+)
+
+func loadConfigFromFile(path string) (*Config, error) {
+	configJsonFile, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer configJsonFile.Close()
+
+	byteData, err := io.ReadAll(configJsonFile)
+	if err != nil {
+		return nil, err
+	}
+
+	var cfg Config
+	if err := json.Unmarshal(byteData, &cfg); err != nil {
+		return nil, err
+	}
+	return &cfg, nil
+}
+
+func watchConfigFile(path string) {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		log.Printf("Error creating watcher: %v", err)
+		return
+	}
+	defer watcher.Close()
+
+	dir := filepath.Dir(path)
+	if err := watcher.Add(dir); err != nil {
+		log.Printf("Error watching config directory: %v", err)
+		return
+	}
+
+	for {
+		select {
+		case event, ok := <-watcher.Events:
+			if !ok {
+				return
+			}
+			if event.Op&(fsnotify.Write|fsnotify.Create) != 0 && filepath.Clean(event.Name) == filepath.Clean(path) {
+				log.Printf("Configuration file changed. Reloading\n")
+				if cfg, err := loadConfigFromFile(path); err != nil {
+					log.Printf("Failed to reload configuration: %v", err)
+				} else {
+					mu.Lock()
+					*current = *cfg
+					mu.Unlock()
+				}
+			}
+		case err, ok := <-watcher.Errors:
+			if !ok {
+				return
+			}
+			log.Printf("Watcher error: %v", err)
+		}
+	}
+}
+
 // Init initializes the configuration from a file.
 // The config file path can be set dynamically using environment variables.
 // The default is assumed to be `config.json` in the same directory.
@@ -47,18 +114,17 @@ func Init() *Config {
 	}
 
 	log.Printf("Reading configuration file %s\n", configFilePath)
-	configJsonFile, err := os.Open(configFilePath)
-	if err != nil {
-		panic(err)
-	}
-	defer configJsonFile.Close()
-	byteData, err := io.ReadAll(configJsonFile)
+	cfg, err := loadConfigFromFile(configFilePath)
 	if err != nil {
 		panic(err)
 	}
 
-	var config Config
-	json.Unmarshal(byteData, &config)
+	mu.Lock()
+	current = cfg
+	mu.Unlock()
+
+	go watchConfigFile(configFilePath)
+
 	log.Printf("Configuration file loaded.\n")
-	return &config
+	return current
 }
