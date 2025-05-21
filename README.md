@@ -23,7 +23,20 @@ The behavior of each plugin is driven by configuration, making "ShadowGuard" hig
 The architecture also facilitates both active and passive modes of operation, allowing the system to either block malicious traffic actively or to monitor and alert on potential threats passively. This flexibility of operation modes allows "ShadowGuard" to be tailored to the specific security posture of your application or API.
 
 ## Getting Started:
-TODO: Instructions on how to setup "ShadowGuard", its dependencies, and how to get it running.
+Install Go 1.20+ and clone this repository. Use the `build.sh` script to prepare the PostgreSQL database and other requirements.
+
+After the database is running you can start the service using either `go run` or the helper script:
+
+```shell
+go run cmd/main.go
+```
+
+or
+
+```shell
+chmod +x run.sh
+./run.sh
+```
 
 ### Database
 Run `build.sh` to setup install the necessary dependencies including Postgresql and configures the gorm database.
@@ -58,12 +71,23 @@ docker build . -t shadow_guard
 docker run --network=host shadow_guard
 ```
 
+## Configuration
+
+ShadowGuard reads its settings from `config.json` in the project root. You can override the file location with the `SHADOW_CONFIG` environment variable:
+
+```shell
+export SHADOW_CONFIG=/etc/shadowguard.json
+./run.sh
+```
+
+The configuration file is monitored for changes and will be reloaded automatically without restarting the service.
+
 ## Unit Tests:
 
 In order to run unit tests, you can use the shell script `run_tests.sh` in the root directory. The unit tests can be ran using convential Go commands.
 
 ## Documentation:
-TODO: Link to full API documentation, or brief outline of main methods and how to use them.
+Refer to the source in the `plugins` directory for examples of middleware and plugin usage. Each plugin implements the `Plugin` interface defined in `pkg/plugin`. Configuration options for each plugin are documented in the corresponding README files when available.
 
 ## License:
-TODO: Information on the licensing of "ShadowGuard".
+The project is currently distributed without a specific license. All rights are reserved by the original authors.
