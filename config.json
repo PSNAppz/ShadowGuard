@@ -33,7 +33,7 @@
 						"publishers": [
 							{
 								"type": "slack",
-								"token": "xoxb-198202255696-5682091092327-m8IHyjQEnO6FdIIslpzjq2nz",
+                "token": "YOUR_SLACK_TOKEN",
 								"channelID": "C5UTW0J6N"
 							}
 						]
